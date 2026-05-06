@@ -1,4 +1,4 @@
-# 🚗 Vehicle Hire Management System (Uganda)
+# 🚗 Vehicle Hire Management System 
 
 A web-based vehicle hire management system built using the Laravel framework.  
 The system is designed to manage vehicle rentals, bookings, and user interactions in a structured and efficient way.
@@ -76,3 +76,57 @@ This system follows MVC (Model-View-Controller):
 ```bash
 git clone <repo-url>
 cd vehicle-hire-system
+```
+## 2. Install dependencies
+
+PHP dependencies
+```bash
+composer install
+```
+
+Frontend dependencies
+```bash
+npm install
+```
+---
+
+## 3. Environment setup
+
+Create .env file:
+```bash
+cp .env.example .env
+```
+
+Generate app key:
+```bash
+php artisan key:generate
+```
+---
+
+## 4. Configure database
+
+Update .env:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=vehicle_hire_system
+DB_USERNAME=root
+DB_PASSWORD=
+
+---
+
+## 5. Run migrations
+
+```bash
+php artisan migrate
+```
+---
+
+## 6. Start application
+
+```bash
+php artisan serve
+npm run dev
+```
+Open:
+http://127.0.0.1:8000
