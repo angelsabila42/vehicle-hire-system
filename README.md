@@ -106,12 +106,14 @@ php artisan key:generate
 ## 4. Configure database
 
 Update .env:
+```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=vehicle_hire_system
 DB_USERNAME=root
 DB_PASSWORD=
+```
 
 ---
 
