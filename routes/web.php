@@ -4,11 +4,15 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/customer', function () {
+    return view('customer.index');
+})->middleware(['auth', 'verified'])->name('customer-dashboard');
+
+Route::get('/admin', function () {
+    return view('admin.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
