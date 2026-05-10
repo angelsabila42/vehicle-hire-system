@@ -51,6 +51,7 @@
                 </x-dropdown>
             </div>
             @else
+            <!-- Logo -->
             <div class="flex items-center w-64">
 
                 <div class="flex items-center">
@@ -62,6 +63,7 @@
                 </div>
             </div>
 
+            <!-- Navigation Links -->
             <div class="flex-1 flex items-center justify-center space-x-8">
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="border-none">
                     <div class="flex items-center">
@@ -70,14 +72,14 @@
                     </div>
                 </x-nav-link>
 
-                <x-nav-link href="#" class="border-none">
+                <x-nav-link :href="route('customer.vehicles.index')" :active="request()->routeIs('customer.vehicles.index')" class="border-none">
                     <div class="flex items-center">
                         <i data-lucide="car-front" class="w-4 h-4 mr-2"></i>
                         <span>Vehicles</span>
                     </div>
                 </x-nav-link>
 
-                <x-nav-link href="#" class="border-none">
+                <x-nav-link :href="route('customer.bookings')" :active="request()->routeIs('customer.bookings')" class="border-none">
                     <div class="flex items-center">
                         <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
                         <span>Bookings</span>
