@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Booking;
 
 class BookingController extends Controller
 {
@@ -12,7 +13,8 @@ class BookingController extends Controller
     public function adminIndex()
     {
         // $bookings = Booking::all(); // Later you will fetch all bookings
-        return view('admin.bookings'); 
+       $bookings = Booking::with(['user', 'vehicle'])->get();
+       return view('admin.bookings', compact('bookings')); 
     }
 
     public function customerIndex()
@@ -53,13 +55,41 @@ class BookingController extends Controller
     public function showBooking(string $id)
     {
         // For now, we return the view. Later you'll fetch $booking = Booking::findOrFail($id);
-        return view('customer.show');
+       $booking = Booking::with(['user', 'vehicle'])->findOrFail($id);
+       return view('customer.show', compact('booking'));
     }
 
     public function showBookingHistory(string $id)
     {
         // For now, we return the view. Later you'll fetch $booking = Booking::findOrFail($id);
         return view('customer.show-history');
+    }
+
+    public function approveBooking(string $id)
+    {
+    $booking = Booking::findOrFail($id);
+    $booking->status = 'approved';
+    $booking->save();
+    return redirect()->back()
+        ->with('success', 'Booking approved successfully');
+    }
+
+    public function rejectBooking(string $id)
+    {
+    $booking = Booking::findOrFail($id);
+    $booking->status = 'rejected';
+    $booking->save();
+    return redirect()->back()
+        ->with('success', 'Booking rejected successfully');
+    }
+
+    public function completeBooking(string $id)
+    {
+    $booking = Booking::findOrFail($id);
+    $booking->status = 'completed';
+    $booking->save();
+    return redirect()->back()
+        ->with('success', 'Booking marked as completed');
     }
 
     /**
