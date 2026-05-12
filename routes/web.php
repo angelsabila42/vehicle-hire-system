@@ -30,6 +30,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/bookings', [BookingController::class, 'adminIndex'])->name('admin.bookings');
     Route::get('/vehicles', [VehicleController::class, 'adminVehicleIndex'])->name('admin.vehicles');
     Route::post('/vehicles/store', [VehicleController::class, 'store'])->name('admin.vehicles.store');
+    Route::post('/bookings/{id}/approve', [BookingController::class, 'approveBooking'])->name('admin.bookings.approve');
+    Route::post('/bookings/{id}/reject', [BookingController::class, 'rejectBooking'])->name('admin.bookings.reject');
+    Route::post('/bookings/{id}/complete', [BookingController::class, 'completeBooking'])->name('admin.bookings.complete');
 });
 
 
@@ -38,13 +41,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-//Admin bookings route
-Route::post('/admin/bookings/{id}/approve',
-    [BookingController::class, 'approveBooking']);
-Route::post('/admin/bookings/{id}/reject',
-    [BookingController::class, 'rejectBooking']);
-Route::post('/admin/bookings/{id}/complete',
-    [BookingController::class, 'completeBooking']);
 
 require __DIR__.'/auth.php';

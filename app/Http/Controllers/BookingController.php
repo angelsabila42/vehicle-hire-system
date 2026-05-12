@@ -12,10 +12,10 @@ class BookingController extends Controller
      */
     public function adminIndex()
     {
-        // $bookings = Booking::all(); // Later you will fetch all bookings
-    //    $bookings = Booking::with(['user', 'vehicle'])->get();
-    //    return view('admin.bookings', compact('bookings')); 
-        return view('admin.bookings'); 
+        $bookings = Booking::all(); // Later you will fetch all bookings
+        $bookings = Booking::with(['user', 'vehicle'])->get();
+        return view('admin.bookings', compact('bookings')); 
+         
     }
 
     public function customerIndex()
@@ -69,7 +69,7 @@ class BookingController extends Controller
     public function approveBooking(string $id)
     {
     $booking = Booking::findOrFail($id);
-    $booking->status = 'approved';
+    $booking->status = 'Confirmed';
     $booking->save();
     return redirect()->back()
         ->with('success', 'Booking approved successfully');
@@ -78,7 +78,7 @@ class BookingController extends Controller
     public function rejectBooking(string $id)
     {
     $booking = Booking::findOrFail($id);
-    $booking->status = 'rejected';
+    $booking->status = 'Rejected';
     $booking->save();
     return redirect()->back()
         ->with('success', 'Booking rejected successfully');
@@ -87,7 +87,7 @@ class BookingController extends Controller
     public function completeBooking(string $id)
     {
     $booking = Booking::findOrFail($id);
-    $booking->status = 'completed';
+    $booking->status = 'Completed';
     $booking->save();
     return redirect()->back()
         ->with('success', 'Booking marked as completed');

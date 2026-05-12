@@ -35,19 +35,20 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
+                    @foreach($bookings as $booking)
                     <tr class="hover:bg-gray-50/50 transition-colors group">
-                        <td class="px-8 py-6 font-bold text-slate-900">#1</td>
+                        <td class="px-8 py-6 font-bold text-slate-900">#{{ $booking->id }}</td>
                         <td class="px-8 py-6">
-                            <div class="text-sm font-extrabold text-slate-900">John Kamau</div>
-                            <div class="text-xs text-gray-400 font-medium">john.kamau@email.com</div>
+                            <div class="text-sm font-extrabold text-slate-900">{{ $booking->user->name }}</div>
+                            <div class="text-xs text-gray-400 font-medium">{{ $booking->user->email }}</div>
                         </td>
                         <td class="px-8 py-6">
-                            <div class="text-sm font-bold text-slate-700">Toyota Rav4</div>
-                            <div class="text-[10px] text-gray-400 font-bold uppercase mt-0.5">5/10/2026</div>
+                            <div class="text-sm font-bold text-slate-700">{{ $booking->vehicle->name }}</div>
+                            <div class="text-[10px] text-gray-400 font-bold uppercase mt-0.5">{{ $booking->pickup_date }}</div>
                         </td>
                         <td class="px-8 py-6">
                             <span class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 text-[11px] font-extrabold tracking-tight">
-                                Pending
+                                {{ $booking->status }}
                             </span>
                         </td>
                         <td class="px-8 py-6 text-sm font-extrabold text-slate-900">
@@ -68,51 +69,23 @@
                                     })" class="p-2 text-gray-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>
-                                <button class="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all">
-                                    <i data-lucide="check-circle" class="w-4 h-4"></i>
-                                </button>
-                                <button class="p-2 text-red-400 hover:bg-red-50 rounded-xl transition-all">
-                                    <i data-lucide="x-circle" class="w-4 h-4"></i>
-                                </button>
+                                <form action="{{ route('admin.bookings.approve', 1) }}" method="POST">
+                                @csrf
+                                    <button type="submit"
+                                        class="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all">
+                                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                    </button>
+                                </form>
+                                <form action="{{ route('admin.bookings.reject', 1) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="p-2 text-red-400 hover:bg-red-50 rounded-xl transition-all">
+                                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-gray-50 transition-colors group">
-                        <td class="px-8 py-6 font-bold text-slate-900">#2</td>
-                        <td class="px-8 py-6">
-                            <div class="text-sm font-extrabold text-slate-900">Sarah Nakato</div>
-                            <div class="text-xs text-gray-400 font-medium">sarah.n@email.com</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="text-sm font-bold text-slate-700">Honda Accord</div>
-                            <div class="text-[10px] text-gray-400 font-bold uppercase mt-0.5">5/8/2026</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <span class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 text-[11px] font-extrabold tracking-tight">
-                                Confirmed
-                            </span>
-                        </td>
-                        <td class="px-8 py-6 text-sm font-extrabold text-slate-900">
-                            <span class="text-[10px] text-gray-400 mr-1 uppercase">UGX</span>240,000
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center justify-center gap-3">
-                                <button @click="openBookingDrawer({
-                                    id: 1, 
-                                    customer_name: 'Sarah Nakato', 
-                                    customer_email: 'sarah.n@email.com',
-                                    vehicle_name: 'Honda Accord',
-                                    pickup_date: '5/8/2026',
-                                    location: 'Kampala - City Center',
-                                    status: 'Confirmed',
-                                    amount: '240,000'
-                                    })" class="p-2 text-gray-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
-                                    <i data-lucide="eye" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
