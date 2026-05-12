@@ -65,30 +65,39 @@
 
             <!-- Navigation Links -->
             <div class="flex-1 flex items-center justify-center space-x-8">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="border-none">
-                    <div class="flex items-center">
-                        <i data-lucide="house" class="w-4 h-4 mr-2"></i>
-                        <span>Home</span>
-                    </div>
-                </x-nav-link>
 
-                <x-nav-link :href="route('customer.vehicles.index')" :active="request()->routeIs('customer.vehicles.index')" class="border-none">
-                    <div class="flex items-center">
-                        <i data-lucide="car-front" class="w-4 h-4 mr-2"></i>
-                        <span>Vehicles</span>
-                    </div>
-                </x-nav-link>
 
-                <x-nav-link :href="route('customer.bookings')" :active="request()->routeIs('customer.bookings')" class="border-none">
-                    <div class="flex items-center">
-                        <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
-                        <span>Bookings</span>
-                    </div>
-                </x-nav-link>
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-6 py-2 rounded-xl font-bold transition-all duration-200 
+                    {{ request()->routeIs('dashboard') 
+                    ? 'bg-gray-100 text-slate-900 shadow-sm' 
+                    : 'text-gray-400 hover:bg-slate-100 hover:text-slate-900' 
+                }}">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                    <span>Home</span>
+                </a>
+
+                <a href="{{ route('customer.vehicles.index') }}" class="flex items-center gap-2 px-6 py-2 rounded-xl font-bold transition-all duration-200 
+                    {{ request()->routeIs('customer.vehicles.index') 
+                    ? 'bg-gray-100 text-slate-900 shadow-sm' 
+                    : 'text-gray-400 hover:bg-slate-100 hover:text-slate-900' 
+                }}">
+                    <i data-lucide="car-front" class="w-4 h-4"></i>
+                    <span>Vehicles</span>
+                </a>
+
+                <a href="{{ route('customer.bookings') }}" class="flex items-center gap-2 px-6 py-2 rounded-xl font-bold transition-all duration-200 
+                    {{ request()->routeIs('customer.bookings') 
+                    ? 'bg-gray-100 text-slate-900 shadow-sm' 
+                    : 'text-gray-400 hover:bg-slate-100 hover:text-slate-900' 
+                }}">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span>Bookings</span>
+                </a> 
+
             </div>
 
             <div class="flex items-center justify-end w-64 space-x-4">
-            <!-- Profile -->
+                <!-- Profile -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center space-x-3 focus:outline-none group">

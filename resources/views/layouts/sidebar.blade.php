@@ -11,7 +11,7 @@
     </div>
 
     <nav class="flex-1 px-4 py-6 space-y-4">
-        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="overflow-hidden whitespace-nowrap">
+        <x-nav-link href="{{ route('admin.dashboard') }}" active="{{ request()->routeIs('admin.dashboard') }}" class="overflow-hidden whitespace-nowrap">
             <div class="flex items-center min-w-[24px]"> <i data-lucide="layout-dashboard" class="w-6 h-6 shrink-0"></i>
             </div>
             <span x-show="sidebarOpen" x-cloak class="ml-3 font-medium transition-opacity duration-300">
@@ -19,12 +19,12 @@
             </span>
         </x-nav-link>
 
-        <x-nav-link href="#" class="overflow-hidden whitespace-nowrap">
+        <x-nav-link href="{{ route('admin.vehicles') }}" active="{{ request()->routeIs('admin.vehicles') }}" class="overflow-hidden whitespace-nowrap">
             <div class="flex items-center min-w-[24px]"><i data-lucide="car-front" class="w-6 h-6 shrink-0"></i></div>
             <span x-show="sidebarOpen" x-cloak class="ml-3 font-medium transition-opacity duration-300">Vehicles</span>
         </x-nav-link>
 
-        <x-nav-link :href="route('admin.bookings')" :active="request()->routeIs('admin.bookings')" class="overflow-hidden whitespace-nowrap">
+        <x-nav-link href="{{ route('admin.bookings') }}" active="{{ request()->routeIs('admin.bookings') }}" class="overflow-hidden whitespace-nowrap">
             <div class="flex items-center min-w-[24px]"><i data-lucide="calendar" class="w-6 h-6 shrink-0"></i></div>
             <span x-show="sidebarOpen" x-cloak class="ml-3 font-medium transition-opacity duration-300">My Bookings</span>
         </x-nav-link>
