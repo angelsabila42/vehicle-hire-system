@@ -15,11 +15,35 @@
         </div>
 
         <div class="flex items-center space-x-2 mb-8 bg-white p-2 rounded-2xl border border-gray-100 w-fit overflow-x-auto scrollbar-hide">
-            <button class="px-6 py-2 rounded-xl bg-slate-900 text-white font-bold text-sm shadow-lg shadow-slate-200 transition-all">All</button>
-            <button class="px-6 py-2 rounded-xl text-gray-500 hover:bg-gray-50 font-bold text-sm transition-colors">Pending</button>
-            <button class="px-6 py-2 rounded-xl text-gray-500 hover:bg-gray-50 font-bold text-sm transition-colors">Confirmed</button>
-            <button class="px-6 py-2 rounded-xl text-gray-500 hover:bg-gray-50 font-bold text-sm transition-colors">Completed</button>
-            <button class="px-6 py-2 rounded-xl text-gray-500 hover:bg-gray-50 font-bold text-sm transition-colors">Cancelled</button>
+            <a href="{{ route('admin.bookings') }}"
+               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+               {{ !$status ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
+               All
+            </a>
+
+            <a href="{{ route('admin.bookings', ['status' => 'Pending']) }}"
+               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+               {{ $status == 'Pending' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
+               Pending
+            </a>
+
+            <a href="{{ route('admin.bookings', ['status' => 'Confirmed']) }}"
+               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+               {{ $status == 'Confirmed' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
+               Confirmed
+            </a>
+
+            <a href="{{ route('admin.bookings', ['status' => 'Confirmed']) }}"
+               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+               {{ $status == 'Confirmed' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
+               Completed
+            </a>
+
+            <a href="{{ route('admin.bookings', ['status' => 'Rejected']) }}"
+              class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+              {{ $status == 'Rejected' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
+              Cancelled
+            </a>
         </div>
 
         <div class="bg-white rounded-[1.5rem] border border-gray-100 overflow-hidden shadow-sm">
@@ -69,14 +93,14 @@
                                     })" class="p-2 text-gray-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>
-                                <form action="{{ route('admin.bookings.approve', 1) }}" method="POST">
+                                <form action="{{ route('admin.bookings.approve', $booking->id) }}" method="POST">
                                 @csrf
                                     <button type="submit"
                                         class="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all">
                                         <i data-lucide="check-circle" class="w-4 h-4"></i>
                                     </button>
                                 </form>
-                                <form action="{{ route('admin.bookings.reject', 1) }}" method="POST">
+                                <form action="{{ route('admin.bookings.reject', $booking->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="p-2 text-red-400 hover:bg-red-50 rounded-xl transition-all">
                                         <i data-lucide="x-circle" class="w-4 h-4"></i>
