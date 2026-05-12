@@ -13,8 +13,9 @@ class BookingController extends Controller
     public function adminIndex()
     {
         // $bookings = Booking::all(); // Later you will fetch all bookings
-       $bookings = Booking::with(['user', 'vehicle'])->get();
-       return view('admin.bookings', compact('bookings')); 
+    //    $bookings = Booking::with(['user', 'vehicle'])->get();
+    //    return view('admin.bookings', compact('bookings')); 
+        return view('admin.bookings'); 
     }
 
     public function customerIndex()

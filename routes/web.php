@@ -14,17 +14,22 @@ Route::get('/', function () {
 // Customer Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
+
     Route::get('/bookings', [BookingController::class, 'customerIndex'])->name('customer.bookings');
     Route::get('/bookings/{id}', [BookingController::class, 'showBooking'])->name('customer.booking.show');
     Route::get('/bookings/history/{id}', [BookingController::class, 'showBookingHistory'])->name('customer.booking.history.show');
     Route::get('/bookings/create/{id}', [BookingController::class, 'showBookingForm'])->name('customer.booking.create');
+
     Route::get('/vehicles/details/{id}', [VehicleController::class, 'showDetails'])->name('customer.vehicles.show.details');
     Route::get('/vehicles', [VehicleController::class, 'index'])->name('customer.vehicles.index');
 });
 
+//Admin Routes
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/bookings', [BookingController::class, 'adminIndex'])->name('admin.bookings');
+    Route::get('/vehicles', [VehicleController::class, 'adminVehicleIndex'])->name('admin.vehicles');
+    Route::post('/vehicles/store', [VehicleController::class, 'store'])->name('admin.vehicles.store');
 });
 
 
@@ -35,7 +40,6 @@ Route::middleware('auth')->group(function () {
 });
 
 //Admin bookings route
-Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
 Route::post('/admin/bookings/{id}/approve',
     [BookingController::class, 'approveBooking']);
 Route::post('/admin/bookings/{id}/reject',
