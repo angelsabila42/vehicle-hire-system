@@ -10,12 +10,15 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        $bookings = Booking::all(); // Later you will fetch all bookings
-        $bookings = Booking::with(['user', 'vehicle'])->get();
-        return view('admin.bookings', compact('bookings')); 
-         
+      $status = $request->query('status');
+      $query = Booking::with(['user', 'vehicle']);
+      if ($status && $status != 'All') {    // Filter only if status exists and is not 'All'
+        $query->where('status', $status);
+      }
+      $bookings = $query->get();
+       return view('admin.bookings', compact('bookings', 'status'));
     }
 
     public function customerIndex()
