@@ -34,13 +34,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//Admin bookings route
-Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
-Route::post('/admin/bookings/{id}/approve',
+ //Admin bookings route
+ Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
+ Route::post('/admin/bookings/{id}/approve',
     [BookingController::class, 'approveBooking']);
-Route::post('/admin/bookings/{id}/reject',
-    [BookingController::class, 'rejectBooking']);
-Route::post('/admin/bookings/{id}/complete',
-    [BookingController::class, 'completeBooking']);
+ Route::post('/admin/bookings/{id}/reject',
+     [BookingController::class, 'rejectBooking']);
+ Route::post('/admin/bookings/{id}/complete',
+     [BookingController::class, 'completeBooking']);
 
 require __DIR__.'/auth.php';
