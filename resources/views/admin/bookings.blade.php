@@ -82,14 +82,14 @@
                             <div class="flex items-center justify-center gap-3">
                                 <!--Change this once you have mock data or have connected the database-->
                                 <button @click="openBookingDrawer({
-                                    id: 1, 
-                                    customer_name: 'John Kamau', 
-                                    customer_email: 'john.kamau@email.com',
-                                    vehicle_name: 'Toyota Rav4',
-                                    pickup_date: '5/10/2026',
-                                    location: 'Kampala - City Center',
-                                    status: 'Pending',
-                                    amount: '600,000'
+                                    id: {{ $booking->id }}, 
+                                    customer_name: '{{ $booking->user->name }}', 
+                                    customer_email: '{{ $booking->user->email }}',
+                                    vehicle_name: '{{ $booking->vehicle->name }}',
+                                    pickup_date: '{{ $booking->pickup_date }}',
+                                    location: '{{ $booking->location }}',
+                                    status: '{{ $booking->status }}',
+                                    amount: '{{ $booking->payment }}'
                                     })" class="p-2 text-gray-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>
