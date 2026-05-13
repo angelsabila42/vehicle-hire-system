@@ -10,12 +10,15 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        // $bookings = Booking::all(); // Later you will fetch all bookings
-    //    $bookings = Booking::with(['user', 'vehicle'])->get();
-    //    return view('admin.bookings', compact('bookings')); 
-        return view('admin.bookings'); 
+      $status = $request->query('status');
+      $query = Booking::with(['user', 'vehicle']);
+      if ($status && $status != 'All') {    // Filter only if status exists and is not 'All'
+        $query->where('status', $status);
+      }
+      $bookings = $query->get();
+       return view('admin.bookings', compact('bookings', 'status'));
     }
 
     public function customerIndex()
@@ -69,7 +72,7 @@ class BookingController extends Controller
     public function approveBooking(string $id)
     {
     $booking = Booking::findOrFail($id);
-    $booking->status = 'approved';
+    $booking->status = 'Confirmed';
     $booking->save();
     return redirect()->back()
         ->with('success', 'Booking approved successfully');
@@ -78,7 +81,7 @@ class BookingController extends Controller
     public function rejectBooking(string $id)
     {
     $booking = Booking::findOrFail($id);
-    $booking->status = 'rejected';
+    $booking->status = 'Rejected';
     $booking->save();
     return redirect()->back()
         ->with('success', 'Booking rejected successfully');
@@ -87,7 +90,7 @@ class BookingController extends Controller
     public function completeBooking(string $id)
     {
     $booking = Booking::findOrFail($id);
-    $booking->status = 'completed';
+    $booking->status = 'Completed';
     $booking->save();
     return redirect()->back()
         ->with('success', 'Booking marked as completed');
