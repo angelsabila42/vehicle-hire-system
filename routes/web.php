@@ -7,9 +7,7 @@ use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VehicleController;
 
-Route::get('/', function () {
-    return view('login');
-});
+
 
 // Customer Routes
 Route::middleware(['auth'])->group(function () {
