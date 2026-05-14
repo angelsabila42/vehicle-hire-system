@@ -19,7 +19,12 @@ class BookingSeeder extends Seeder
                 'user_id' => $user->id,
                 'vehicle_id' => $vehicle->VehicleId,
                 'status' => 'pending',
-                'pickUpLocation' => 'Main Terminal',
+                'pickUpLocation' => [
+                    'Kampala - City Center',
+                    'Entebbe International Airport',
+                    'Jinja - Main Office',
+                    'Mbarara - Branch Office'
+                ],
                 'payment' => 'Credit Card',
                 'startDate' => now()->addDays(1)->toDateString(),
                 'endDate' => now()->addDays(3)->toDateString(),

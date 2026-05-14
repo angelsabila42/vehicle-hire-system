@@ -27,6 +27,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/bookings', [BookingController::class, 'adminIndex'])->name('admin.bookings');
     Route::get('/vehicles', [VehicleController::class, 'adminVehicleIndex'])->name('admin.vehicles');
+    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+    
     Route::post('/vehicles/store', [VehicleController::class, 'store'])->name('admin.vehicles.store');
     Route::post('/bookings/{id}/approve', [BookingController::class, 'approveBooking'])->name('admin.bookings.approve');
     Route::post('/bookings/{id}/reject', [BookingController::class, 'rejectBooking'])->name('admin.bookings.reject');

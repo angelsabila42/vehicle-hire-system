@@ -46,14 +46,19 @@
             </header>
             @endisset
 
-            <main class="p-6 overflow-y-auto">
+            <main class="p-6 flex-1">
                 {{ $slot }}
             </main>
+
+            @if(!request()->is('admin*'))
+                    <x-footer/>
+                @endif
         </div>
+    
     </div>
 </body>
+
 <script>
     lucide.createIcons();
-
 </script>
 </html>
