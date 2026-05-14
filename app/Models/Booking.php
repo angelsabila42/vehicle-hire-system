@@ -26,10 +26,10 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Booking belongs to Vehicle
-     public function vehicle()
-     {
-         return $this->belongsTo(Vehicle::class);
-     }
+    //Booking belongs to Vehicle
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
 
 }

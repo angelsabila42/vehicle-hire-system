@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Booking;
+use App\Models\Vehicle;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -11,20 +13,24 @@ class BookingController extends Controller
      * Display a listing of the resource.
      */
     public function adminIndex(Request $request)
-    {
-      $status = $request->query('status');
-      $query = Booking::with(['user', 'vehicle']);
-      if ($status && $status != 'All') {    // Filter only if status exists and is not 'All'
-        $query->where('status', $status);
-      }
-      $bookings = $query->get();
-       return view('admin.bookings', compact('bookings', 'status'));
+    {   
+        $user = Auth::user();
+        $status = $request->query('status');
+        $query = Booking::with(['user', 'vehicle']);
+
+        if ($status && $status !== 'All') {
+            $query->where('status', $status);
+        }
+
+        $bookings = $query->get();
+
+        return view('admin.bookings', compact('bookings', 'status'));
     }
 
     public function customerIndex()
     {
-        // $bookings = auth()->user()->bookings; // Later you will fetch only their bookings
-        return view('customer.bookings');
+         $bookings = Auth::user()->bookings()->with('vehicle')->get(); 
+        return view('customer.bookings', compact('bookings'));
     }
 
 
@@ -33,12 +39,14 @@ class BookingController extends Controller
      */
     public function create(string $id)
     {
-        return view('customer.create-booking');
+        return $this->showBookingForm($id);
     }
 
     public function showBookingForm(string $id)
     {
-        return view('customer.create-booking');
+        $vehicle = Vehicle::findOrFail($id);
+
+        return view('customer.create-booking', compact('vehicle'));
     }
 
     /**
@@ -48,9 +56,22 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'pickUpLocation' => 'required|string|max:255',
+            'payment' => 'nullable|string|max:255',
+            'startDate' => 'required|date|after_or_equal:today',
+            'endDate' => 'required|date|after_or_equal:startDate',
+        ]);
+
+        $data['user_id'] =Auth::id();
+        $data['status'] = 'Pending';
+
+        Booking::create($data);
+
+        return redirect()->route('customer.bookings')->with('success', 'Booking request submitted successfully.');
     }
 
     /**
@@ -63,10 +84,11 @@ class BookingController extends Controller
        return view('customer.show', compact('booking'));
     }
 
-    public function showBookingHistory(string $id)
+     public function showBookingHistory(string $id)
     {
-        // For now, we return the view. Later you'll fetch $booking = Booking::findOrFail($id);
-        return view('customer.show-history');
+        $booking = Booking::with(['vehicle'])->findOrFail($id);
+
+        return view('customer.show-history', compact('booking'));
     }
 
     public function approveBooking(string $id)
