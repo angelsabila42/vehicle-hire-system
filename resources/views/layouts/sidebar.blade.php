@@ -29,7 +29,7 @@
             <span x-show="sidebarOpen" x-cloak class="ml-3 font-medium transition-opacity duration-300">My Bookings</span>
         </x-nav-link>
 
-        <x-nav-link href="#" class="w-full justify-start border-none">
+        <x-nav-link href="{{ route('admin.settings') }}" active="{{ request()->routeIs('admin.settings') }}" class="overflow-hidden whitespace-nowrap">
             <div class="flex items-center min-w-[24px]"><i data-lucide="settings" class="w-6 h-6 shrink-0"></i></div>
             <span x-show="sidebarOpen" x-cloak class="ml-3 font-medium transition-opacity duration-300">Settings</span>
         </x-nav-link>
