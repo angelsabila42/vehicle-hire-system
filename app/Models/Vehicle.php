@@ -41,9 +41,10 @@ class Vehicle extends Model
         return $this->hasMany(Booking::class);
     }
 
+     protected $primaryKey = 'VehicleId';
+
 
 }
-    protected $primaryKey = 'VehicleId';
-
+   
   
-}
+
