@@ -15,8 +15,8 @@ class Vehicle extends Model
         'name',
         'category',
         'year',
-        'plate_number',
-        'price',
+         'number_plate',
+        'price_per_day',
         'transmission',
         'fuel_type',
         'status',
@@ -24,9 +24,11 @@ class Vehicle extends Model
         'rating',
         'description',
         'features',
+        'location',
         'passengers',
+         'type',
         'insurance',
-        'image',
+        'image_path',
     ];
 
     protected $casts = [
@@ -40,4 +42,8 @@ class Vehicle extends Model
     }
 
 
+}
+    protected $primaryKey = 'VehicleId';
+
+  
 }
