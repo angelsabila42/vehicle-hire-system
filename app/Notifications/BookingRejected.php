@@ -6,13 +6,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Booking;
+use App\Models\Booking; 
 
-class PickupReminder extends Notification
+class BookingRejected extends Notification
 {
     use Queueable;
-
-    protected Booking $booking;
+     protected Booking $booking;
 
     /**
      * Create a new notification instance.
@@ -20,6 +19,8 @@ class PickupReminder extends Notification
     public function __construct(Booking $booking)
     {
         $this->booking = $booking;
+    
+        //
     }
 
     /**
@@ -29,7 +30,7 @@ class PickupReminder extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['mail'];
     }
 
     /**
@@ -58,12 +59,12 @@ class PickupReminder extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title' => 'Pickup Reminder',
-            'message' => 'Your vehicle pickup is scheduled for tomorrow',
-            'icon' => 'bell-ring',
-            'type' => 'pickup_reminder',
-            'bg_color' => 'bg-blue-100',
-            'icon_color' => 'text-blue-600',
+            'title' => 'Booking Rejected',
+            'message' => 'Your booking has been rejected. Please Contact the Help line for more information',
+            'icon' => 'times',
+            'type' => 'booking_rejected',
+            'bg_color' => 'bg-red-100',
+            'icon_color' => 'text-red-600',
             'booking_id' => $this->booking->id,
         ];
     }

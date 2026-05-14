@@ -8,11 +8,10 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Booking;
 
-class PickupReminder extends Notification
+class BookingCancelled extends Notification
 {
     use Queueable;
-
-    protected Booking $booking;
+     protected Booking $booking;
 
     /**
      * Create a new notification instance.
@@ -29,7 +28,7 @@ class PickupReminder extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['mail'];
     }
 
     /**
@@ -58,12 +57,12 @@ class PickupReminder extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title' => 'Pickup Reminder',
-            'message' => 'Your vehicle pickup is scheduled for tomorrow',
-            'icon' => 'bell-ring',
-            'type' => 'pickup_reminder',
-            'bg_color' => 'bg-blue-100',
-            'icon_color' => 'text-blue-600',
+            'title' => 'Booking Cancelled',
+            'message' => 'Booking ' . $this->booking->id . ' has been cancelled',
+            'icon' => 'times',
+            'type' => 'booking_cancelled',
+            'bg_color' => 'bg-red-100',
+            'icon_color' => 'text-red-600',
             'booking_id' => $this->booking->id,
         ];
     }

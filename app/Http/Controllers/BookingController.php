@@ -5,7 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Vehicle;
+use App\Notifications\BookingPending;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\BookingCancelled;
+use App\Notifications\BookingConfirmed;
+use App\Notifications\BookingRejected;
 
 class BookingController extends Controller
 {
@@ -29,7 +35,7 @@ class BookingController extends Controller
 
     public function customerIndex()
     {
-         $bookings = Auth::user()->bookings()->with('vehicle')->get(); 
+        $bookings = Booking::where('user_id', Auth::id())->with('vehicle')->get();
         return view('customer.bookings', compact('bookings'));
     }
 
@@ -69,7 +75,11 @@ class BookingController extends Controller
         $data['user_id'] =Auth::id();
         $data['status'] = 'Pending';
 
-        Booking::create($data);
+        $booking = Booking::create($data);
+
+        $admins = User::where('role', 'admin')->get();
+        //Trigger Notification to Admin
+        Notification::send($admins, new BookingPending($booking));
 
         return redirect()->route('customer.bookings')->with('success', 'Booking request submitted successfully.');
     }
@@ -79,7 +89,7 @@ class BookingController extends Controller
      */
     public function showBooking(string $id)
     {
-        // For now, we return the view. Later you'll fetch $booking = Booking::findOrFail($id);
+    
        $booking = Booking::with(['user', 'vehicle'])->findOrFail($id);
        return view('customer.show', compact('booking'));
     }
@@ -96,6 +106,9 @@ class BookingController extends Controller
     $booking = Booking::findOrFail($id);
     $booking->status = 'Confirmed';
     $booking->save();
+
+    $booking->user->notify(new BookingConfirmed($booking));
+
     return redirect()->back()
         ->with('success', 'Booking approved successfully');
     }
@@ -105,6 +118,10 @@ class BookingController extends Controller
     $booking = Booking::findOrFail($id);
     $booking->status = 'Rejected';
     $booking->save();
+
+    //Notification to User about Rejection
+    $booking->user->notify(new BookingRejected($booking));
+
     return redirect()->back()
         ->with('success', 'Booking rejected successfully');
     }
@@ -115,7 +132,7 @@ class BookingController extends Controller
     $booking->status = 'Completed';
     $booking->save();
     return redirect()->back()
-        ->with('success', 'Booking marked as completed');
+        ->with('success', 'Booking completed');
     }
 
     /**
