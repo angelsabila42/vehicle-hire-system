@@ -93,7 +93,7 @@
 
                     <div class="pt-6 border-t border-gray-50">
                         <p class="text-gray-400 text-xs font-bold uppercase mb-1">Per day</p>
-                        <p class="text-xl text-slate-900">UGX {{ number_format($vehicle->price) }}</p>
+                        <p class="text-xl text-slate-900">UGX {{ number_format($vehicle->price_per_day) }}</p>
                     </div>
                 </div>
             </div>
