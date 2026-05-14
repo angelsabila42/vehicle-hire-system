@@ -75,8 +75,8 @@
                         <div class="flex items-center space-x-5">
                             <img src="{{ asset('images/rav4.jpg') }}" class="w-28 h-20 object-cover rounded-[1.5rem]" alt="Toyota Rav4">
                             <div>
-                                <h4 class="font-bold text-lg text-slate-900">Toyota Rav4</h4>
-                                <p class="text-sm text-gray-400 font-medium">SUV • Automatic</p>
+                                <h4 class="font-bold text-lg text-slate-900">{{ $vehicle->name }}</h4>
+                                <p class="text-sm text-gray-400 font-medium">{{ $vehicle->category }} • {{ $vehicle->transmission }}</p>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                     <div class="p-10 space-y-6">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Daily Rate</span>
-                            <span class="font-bold text-slate-900 text-lg">UGX 120,000</span>
+                            <span class="font-bold text-slate-900 text-lg">UGX {{ number_format($vehicle->price) }}</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Rental Period</span>
@@ -92,7 +92,7 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Insurance</span>
-                            <span class="font-bold text-green-600 text-lg">Free</span>
+                            <span class="font-bold text-green-600 text-lg">{{ $vehicle->insurance ? 'Free' : 'Not included' }}</span>
                         </div>
                         
                         <div class="pt-8 border-t border-gray-50 mt-4">
