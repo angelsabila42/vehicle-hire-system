@@ -16,20 +16,41 @@ class BookingController extends Controller
     {   
         $user = Auth::user();
         $status = $request->query('status');
+        $search = $request->query('search');
         $query = Booking::with(['user', 'vehicle']);
 
         if ($status && $status !== 'All') {
             $query->where('status', $status);
         }
 
+         if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('status', 'LIKE', "%{$search}%")
+              ->orWhereHas('user', function ($userQuery) use ($search) {
+                    $userQuery->where('name', 'LIKE', "%{$search}%")
+                              ->orWhere('email', 'LIKE', "%{$search}%");
+              })
+              ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
+                    $vehicleQuery->where('name', 'LIKE', "%{$search}%");
+              });
+        });
+    }
+
         $bookings = $query->get();
 
-        return view('admin.bookings', compact('bookings', 'status'));
+        return view('admin.bookings', compact('bookings', 'status', 'search'));
     }
 
     public function customerIndex()
     {
-         $bookings = Auth::user()->bookings()->with('vehicle')->get(); 
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $bookings = Booking::with('vehicle')
+            ->where('user_id', Auth::id())
+            ->get();
+
         return view('customer.bookings', compact('bookings'));
     }
 

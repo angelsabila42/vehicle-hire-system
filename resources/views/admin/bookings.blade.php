@@ -5,13 +5,14 @@
                 <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Booking Management</h1>
                 <p class="text-gray-500 mt-1 font-medium">Review and manage customer bookings</p>
             </div>
-
+            <form method="GET" action="{{ route('admin.bookings') }}">
             <div class="relative group">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <i data-lucide="search" class="w-5 h-5 text-gray-400 group-focus-within:text-slate-900 transition-colors"></i>
                 </div>
-                <input type="text" placeholder="Search bookings..." class="block w-full md:w-80 pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all shadow-sm">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search bookings..." class="block w-full md:w-80 pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all shadow-sm">
             </div>
+        </form>
         </div>
 
         <div class="flex items-center space-x-2 mb-8 bg-white p-2 rounded-2xl border border-gray-100 w-fit overflow-x-auto scrollbar-hide">
