@@ -16,6 +16,10 @@ class Booking extends Model
         'endDate'
     ];
 
+    protected $casts = [
+        'pickUpLocation' => 'array',
+    ];
+
      // Booking belongs to User
     public function user()
     {

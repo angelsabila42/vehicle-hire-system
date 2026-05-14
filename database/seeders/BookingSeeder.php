@@ -17,7 +17,7 @@ class BookingSeeder extends Seeder
         if ($user && $vehicle) {
             Booking::create([
                 'user_id' => $user->id,
-                'vehicle_id' => $vehicle->VehicleId,
+                'vehicle_id' => $vehicle->vehicle_id,
                 'status' => 'pending',
                 'pickUpLocation' => [
                     'Kampala - City Center',

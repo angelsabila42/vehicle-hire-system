@@ -27,10 +27,19 @@
 
             <!-- Notification Bell -->
             <div class="flex items-center space-x-4">
-                <button class="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                    <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
-                </button>
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="relative p-2 text-gray-400 hover:text-gray-600">
+                        <i data-lucide="bell" class="w-6 h-6"></i>
+                        <!-- Red dot if there are unread notifications -->
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                        <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-80">
+                        <x-notification-dropdown />
+                    </div>
+                </div>
 
                 <x-dropdown align="right" width="48">
                     <!-- Profile -->
@@ -92,11 +101,25 @@
                 }}">
                     <i data-lucide="calendar" class="w-4 h-4"></i>
                     <span>Bookings</span>
-                </a> 
+                </a>
 
             </div>
 
             <div class="flex items-center justify-end w-64 space-x-4">
+                <!-- Notification Bell -->
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="relative p-2 text-gray-400 hover:text-gray-600">
+                        <i data-lucide="bell" class="w-6 h-6"></i>
+                        <!-- Red dot if there are unread notifications -->
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                        <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-80">
+                        <x-notification-dropdown />
+                    </div>
+                </div>
                 <!-- Profile -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
