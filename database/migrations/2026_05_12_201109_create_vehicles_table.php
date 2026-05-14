@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('price_per_day', 10, 2);
             $table->string('status')->default('Available');
             $table->string('type');
+            $table->string('location');
             $table->string('image_path')->nullable();
             $table->timestamps();
         });

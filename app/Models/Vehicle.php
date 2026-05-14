@@ -19,5 +19,7 @@ class Vehicle extends Model
         'price_per_day',
         'status',
         'image_path',
+        'type',
+        'location',
     ];
 }

@@ -14,9 +14,9 @@ class VehicleSeeder extends Seeder
             'make' => 'Toyota',
             'model' => 'Rav4',
             'year' => 2023,
-            'price_per_day' => 50,000,
+            'price_per_day' => 40000,
             'status' => 'Available',
-            'image_path' => null,
+            'image_path' => public\images\rav4_new.png,
             'type' => 'Five Seater',
         ]);
 
@@ -25,9 +25,9 @@ class VehicleSeeder extends Seeder
             'make' => 'Honda',
             'model' => 'Accord',
             'year' => 2022,
-            'price_per_day' => 40,000,
+            'price_per_day' => 40000,
             'status' => 'Available',
-            'image_path' => null,
+            'image_path' => public\images\accord.jpg,
             'type' => 'Five Seater',
         ]);
 
@@ -36,54 +36,65 @@ class VehicleSeeder extends Seeder
             'make' => 'Toyota',
             'model' => 'Vanguard',
             'year' => 2019,
-            'price_per_day' => 150000,
+            'price_per_day' => 45000,
             'status' => 'Available',
-            'image_path' => null,
+            'image_path' => public\images\vanguard.jpg,
             'type' => 'Seven Seater',
         ]);
 
         Vehicle::create([
             'number_plate' => 'UA 089EF', 
             'make' => 'Subaru', 
-            'model' => 'Outback'
+            'model' => 'Outback',
             'year' => 2015,
-            'price_per_day' => 45,000,
+            'price_per_day' => 40000,
             'status' => 'Maintenance',
-            'image-path' => null,
+            'image-path' => public\images\outback.jpg,
             'type' => 'Five Seater',
         ]);
 
         Vehicle::create([
             'number_plate' => 'UBH 778L', 
             'make' => 'Toyota', 
-            'model' => 'Sienta'
+            'model' => 'Sienta',
             'year' => 2015,
-            'price_per_day' => 50,000,
+            'price_per_day' => 45000,
             'status' => 'Available',
-            'image-path' => null,
+            'image-path' => public\images\sienta.jpg,
             'type' => 'Seven Seater',
         ]);
 
         Vehicle::create([
             'number_plate' => 'UAR 576T', 
             'make' => 'Toyota', 
-            'model' => 'Rav4'
+            'model' => 'Rav4',
             'year' => 2018,
-            'price_per_day' => 45,000,
+            'price_per_day' => 45000,
             'status' => 'Booked',
-            'image-path' => null,
+            'image-path' => public\images\rav4_2018.png,
             'type' => 'Five Seater',
         ]);
 
         Vehicle::create([
             'number_plate' => 'UA 012AT', 
             'make' => 'Toyota', 
-            'model' => 'Hilux'
-            'year' => 2015
-            'price_per_day' => 60,000,
+            'model' => 'Hilux',
+            'year' => 2015,
+            'price_per_day' => 70000,
             'status' => 'Available',
-            'image-path' => null,
-            'type' => 'Double Cabin'
+            'image-path' => public\images\hilux.jpg,
+            'type' => 'Double Cabin',
+        ]);
+
+        Vehicle::create([
+            'number_plate' => 'UBC 367M', 
+            'make' => 'Toyota', 
+            'model' => 'Alphard',
+            'year' => 2017,
+            'price_per_day' => 55000,
+            'status' => 'Available',
+            'image_path' => null,
+            'type' => 'Seven Seater',
         ]);
     }
 }
