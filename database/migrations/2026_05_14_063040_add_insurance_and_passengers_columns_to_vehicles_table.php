@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('vehicles', function (Blueprint $table) {
-            $table->integer('passengers')->after('features')->default(4);
+            $table->integer('passengers')->after('type')->default(4);
             $table->boolean('insurance')->after('passengers')->default(true);
         });
     }
