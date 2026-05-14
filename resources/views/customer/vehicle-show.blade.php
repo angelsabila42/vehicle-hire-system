@@ -20,12 +20,12 @@
         <div class="bg-white rounded-[1.0rem] p-8 border border-gray-50">
             <div class="flex justify-between items-start mb-6">
                 <div>
-                    <h1 class="text-3xl text-slate-900 mb-1">Toyota Rav4</h1>
-                    <p class="text-gray-400 font-medium">SUV • 2023</p>
+                    <h1 class="text-3xl text-slate-900 mb-1">{{$vehicle->name}}</h1>
+                    <p class="text-gray-400 font-medium">{{$vehicle->category}} • {{$vehicle->year}}</p>
                 </div>
                 <div class="flex items-center text-amber-400">
                     <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                    <span class="ml-2 font-semibold text-slate-900">4.9</span>
+                    <span class="ml-2 font-semibold text-slate-900">{{ $vehicle->rating }}</span>
                     <span class="ml-1 text-gray-400 text-sm">(124 reviews)</span>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Passengers</p>
-                        <p class="font-bold text-slate-900">5</p>
+                        <p class="font-bold text-slate-900">{{ $vehicle->passengers }}</p>
                     </div>
                 </div>
                 <div class="flex items-center p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
@@ -46,7 +46,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Transmission</p>
-                        <p class="font-bold text-slate-900">Automatic</p>
+                        <p class="font-bold text-slate-900">{{ $vehicle->transmission }}</p>
                     </div>
                 </div>
                 <div class="flex items-center p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
@@ -55,7 +55,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Fuel Type</p>
-                        <p class="font-bold text-slate-900">Petrol</p>
+                        <p class="font-bold text-slate-900">{{ $vehicle->fuel_type }}</p>
                     </div>
                 </div>
                 <div class="flex items-center p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
@@ -64,7 +64,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Insurance</p>
-                        <p class="font-bold text-slate-900">Included</p>
+                        <p class="font-bold text-slate-900">{{ $vehicle->insurance ? 'Included' : 'Not Included' }}</p>
                     </div>
                 </div>
             </div>
@@ -72,14 +72,14 @@
             <div class="mb-10">
                 <h3 class="text-xl text-slate-900 mb-4">About this vehicle</h3>
                 <p class="text-gray-500 leading-relaxed">
-                    Experience comfort and reliability with our Toyota Rav4. Perfect for family trips, business travel, or exploring Uganda's beautiful landscapes. This well-maintained SUV offers spacious interiors, advanced safety features, and excellent fuel efficiency.
+                            {{ $vehicle->description }}
                 </p>
             </div>
 
             <div class="mb-10 pt-10 border-t border-gray-100">
                 <h3 class="text-xl text-slate-900 mb-6">Features</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-y-4">
-                    @foreach(['Air Conditioning', 'Power Steering', 'ABS Brakes', 'Airbags', 'Bluetooth', 'USB Charging', 'Cruise Control', 'Backup Camera'] as $feature)
+                    @foreach($vehicle->features as $feature)
                     <div class="flex items-center text-gray-600">
                         <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mr-3"></div>
                         <span class="font-medium">{{ $feature }}</span>
@@ -93,7 +93,7 @@
         <div class="lg:col-span-1">
             <div class="bg-white p-8 rounded-[1.0rem] border border-gray-100 shadow-xl sticky top-24">
                 <p class="text-gray-400 font-semibold text-sm tracking-tighter">Price per day</p>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-8">UGX 120,000</h2>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-8">UGX {{ number_format($vehicle->price) }}</h2>
 
                 <div class="space-y-4 mb-8">
                     <div class="flex items-center text-gray-500">
@@ -106,11 +106,11 @@
                     </div>
                     <div class="flex items-center text-gray-500">
                         <i data-lucide="shield" class="w-5 h-5 mr-3"></i>
-                        <span>Full insurance included</span>
+                        <span>{{ $vehicle->insurance ? 'Full insurance included' : 'Insurance not included' }}</span>
                     </div>
                 </div>
 
-                <a href="{{ route('customer.booking.create', 1) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
+                <a href="{{ route('customer.booking.create', $vehicle->id) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
                     Book Now
                 </a>
 

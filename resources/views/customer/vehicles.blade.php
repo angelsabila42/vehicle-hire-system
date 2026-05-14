@@ -10,19 +10,39 @@
             <h1 class="text-4xl text-slate-900 tracking-tight mb-2">Available Vehicles</h1>
             <p class="text-gray-400 text-lg font-medium mb-8">Choose from our wide range of quality vehicles</p>
             
-            <div class="flex flex-col md:flex-row md:items-center gap-4 bg-gray-50/50 p-2 rounded-[2rem] border border-gray-100">
+            @php
+                $currentSearch = request('search', '');
+                $currentCategory = request('category', 'All');
+            @endphp
+
+            <form method="GET" action="{{ route('customer.vehicles.index') }}" class="flex flex-col md:flex-row md:items-center gap-4 bg-gray-50/50 p-2 rounded-[2rem] border border-gray-100">
                 <div class="relative flex-grow">
                     <i data-lucide="search" class="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300"></i>
-                    <input type="text" placeholder="Search vehicles..." 
+                    <input type="text" name="search" value="{{ old('search', $currentSearch) }}" placeholder="Search vehicles..."
                         class="w-full pl-14 pr-6 py-4 bg-white border-none rounded-[1.5rem] focus:ring-2 focus:ring-slate-900/5 placeholder-gray-300 text-slate-600 shadow-sm">
                 </div>
-                
-                <div class="flex items-center gap-2 p-1">
-                    <button class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-lg shadow-slate-200 transition-all">All Vehicles</button>
-                    <button class="px-6 py-3 text-gray-400 font-bold text-sm hover:bg-white hover:text-slate-900 rounded-2xl transition-all">Sedan</button>
-                    <button class="px-6 py-3 text-gray-400 font-bold text-sm hover:bg-white hover:text-slate-900 rounded-2xl transition-all">SUV</button>
-                    <button class="px-6 py-3 text-gray-400 font-bold text-sm hover:bg-white hover:text-slate-900 rounded-2xl transition-all">Van</button>
-                </div>
+
+                @if($currentCategory !== 'All')
+                    <input type="hidden" name="category" value="{{ $currentCategory }}">
+                @endif
+
+                <button type="submit" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-lg shadow-slate-200 transition-all">
+                    Search
+                </button>
+            </form>
+
+            <div class="flex flex-wrap items-center gap-2 p-1 mt-4">
+                <a href="{{ route('customer.vehicles.index', array_filter(['search' => $currentSearch, 'category' => 'All'])) }}"
+                    class="px-6 py-3 rounded-2xl text-sm font-bold transition-all {{ $currentCategory === 'All' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-400 hover:bg-white hover:text-slate-900' }}">
+                    All Vehicles
+                </a>
+
+                @foreach($categories as $category)
+                    <a href="{{ route('customer.vehicles.index', array_filter(['search' => $currentSearch, 'category' => $category])) }}"
+                        class="px-6 py-3 rounded-2xl text-sm font-bold transition-all {{ $currentCategory === $category ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-400 hover:bg-white hover:text-slate-900' }}">
+                        {{ $category }}
+                    </a>
+                @endforeach
             </div>
 
             <div class="mt-8">

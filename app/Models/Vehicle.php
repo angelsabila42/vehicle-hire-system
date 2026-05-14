@@ -9,17 +9,41 @@ class Vehicle extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'VehicleId';
-
     protected $fillable = [
-        'number_plate',
         'make',
         'model',
+        'name',
+        'category',
         'year',
+         'number_plate',
         'price_per_day',
+        'transmission',
+        'fuel_type',
         'status',
-        'image_path',
-        'type',
+        'is_available',
+        'rating',
+        'description',
+        'features',
         'location',
+        'passengers',
+         'type',
+        'insurance',
+        'image_path',
     ];
+
+    protected $casts = [
+        'is_available' => 'boolean',
+        'features' => 'array',
+    ];
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+
+}
+    protected $primaryKey = 'VehicleId';
+
+  
 }
