@@ -32,4 +32,13 @@ class Booking extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
+    public function  pickupLocation(){
+        return $this->belongsTo(PickupLocation::class, 'pickup_location_id');
+    }
+
+    public static function getEndingTodayCount(){
+        $count = self::whereDate('endDate', now())->count();
+        return $count . " ending today";
+    }
+
 }

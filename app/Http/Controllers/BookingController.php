@@ -19,30 +19,38 @@ class BookingController extends Controller
      * Display a listing of the resource.
      */
     public function adminIndex(Request $request)
-    {   
-        $user = Auth::user();
+    {
         $status = $request->query('status');
         $search = $request->query('search');
+
         $query = Booking::with(['user', 'vehicle']);
 
+        // Status Filter 
         if ($status && $status !== 'All') {
-            $query->where('status', $status);
+            $allowedStatuses = ['Confirmed', 'Pending', 'Cancelled', 'Rejected', 'Completed'];
+
+            if (in_array($status, $allowedStatuses)) {
+                $query->where('status', $status);
+            }
         }
 
-         if ($search) {
-        $query->where(function ($q) use ($search) {
-            $q->where('status', 'LIKE', "%{$search}%")
-              ->orWhereHas('user', function ($userQuery) use ($search) {
-                    $userQuery->where('name', 'LIKE', "%{$search}%")
-                              ->orWhere('email', 'LIKE', "%{$search}%");
-              })
-              ->orWhereHas('vehicle', function ($vehicleQuery) use ($search) {
-                    $vehicleQuery->where('name', 'LIKE', "%{$search}%");
-              });
-        });
-    }
+        //Search Logic
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('status', 'LIKE', "%{$search}%")
+                    ->orWhereHas('user', function ($u) use ($search) {
+                        $u->where('name', 'LIKE', "%{$search}%")
+                            ->orWhere('email', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('vehicle', function ($v) use ($search) {
+                        // Check if your column is 'name' or 'make'/'model'
+                        $v->where('make', 'LIKE', "%{$search}%")
+                            ->orWhere('model', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
 
-        $bookings = $query->get();
+        $bookings = $query->latest()->paginate(10)->withQueryString();
 
         return view('admin.bookings', compact('bookings', 'status', 'search'));
     }
@@ -83,7 +91,7 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
+    public function store(Request $request)
     {
         $data = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
@@ -93,7 +101,7 @@ class BookingController extends Controller
             'endDate' => 'required|date|after_or_equal:startDate',
         ]);
 
-        $data['user_id'] =Auth::id();
+        $data['user_id'] = Auth::id();
         $data['status'] = 'Pending';
 
         $booking = Booking::create($data);
@@ -110,12 +118,12 @@ class BookingController extends Controller
      */
     public function showBooking(string $id)
     {
-    
-       $booking = Booking::with(['user', 'vehicle'])->findOrFail($id);
-       return view('customer.show', compact('booking'));
+
+        $booking = Booking::with(['user', 'vehicle'])->findOrFail($id);
+        return view('customer.show', compact('booking'));
     }
 
-     public function showBookingHistory(string $id)
+    public function showBookingHistory(string $id)
     {
         $booking = Booking::with(['vehicle'])->findOrFail($id);
 
@@ -124,36 +132,36 @@ class BookingController extends Controller
 
     public function approveBooking(string $id)
     {
-    $booking = Booking::findOrFail($id);
-    $booking->status = 'Confirmed';
-    $booking->save();
+        $booking = Booking::findOrFail($id);
+        $booking->status = 'Confirmed';
+        $booking->save();
 
-    $booking->user->notify(new BookingConfirmed($booking));
+        $booking->user->notify(new BookingConfirmed($booking));
 
-    return redirect()->back()
-        ->with('success', 'Booking approved successfully');
+        return redirect()->back()
+            ->with('success', 'Booking approved successfully');
     }
 
     public function rejectBooking(string $id)
     {
-    $booking = Booking::findOrFail($id);
-    $booking->status = 'Rejected';
-    $booking->save();
+        $booking = Booking::findOrFail($id);
+        $booking->status = 'Rejected';
+        $booking->save();
 
-    //Notification to User about Rejection
-    $booking->user->notify(new BookingRejected($booking));
+        //Notification to User about Rejection
+        $booking->user->notify(new BookingRejected($booking));
 
-    return redirect()->back()
-        ->with('success', 'Booking rejected successfully');
+        return redirect()->back()
+            ->with('success', 'Booking rejected successfully');
     }
 
     public function completeBooking(string $id)
     {
-    $booking = Booking::findOrFail($id);
-    $booking->status = 'Completed';
-    $booking->save();
-    return redirect()->back()
-        ->with('success', 'Booking completed');
+        $booking = Booking::findOrFail($id);
+        $booking->status = 'Completed';
+        $booking->save();
+        return redirect()->back()
+            ->with('success', 'Booking completed');
     }
 
     /**
