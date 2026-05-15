@@ -75,7 +75,7 @@
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach ($vehicles->take(4) as $vehicle)
-                        <a href="{{ route('customer.vehicles.show.details', $vehicle->id) }}" class="group block bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                        <a href="{{ route('customer.vehicles.show.details', $vehicle->VehicleId) }}" class="group block bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
                             <div class="relative h-64 overflow-hidden">
                                 <img src="{{ asset('images/' . $vehicle->image) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $vehicle->name }}">
                                 <div class="absolute bottom-4 right-4">
