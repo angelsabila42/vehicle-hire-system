@@ -28,7 +28,12 @@ class BookingConfirmed extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        if (!$notifiable->notify_new_bookings) {
+            return [];
+        }
+
+        //Send it to the database (no mail).
+        return ['database'];
     }
 
     /**

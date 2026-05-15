@@ -33,6 +33,14 @@ class SendPickupReminders extends Command
             ->get();
 
         foreach ($bookings as $booking) {
+            if (! $booking instanceof Booking) {
+                $booking = Booking::find($booking->id);
+
+                if (! $booking) {
+                    continue;
+                }
+            }
+
             $user = $booking->user;
             $user->notify(new PickupReminder($booking));
 

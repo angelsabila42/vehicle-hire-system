@@ -34,6 +34,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/bookings/{id}/approve', [BookingController::class, 'approveBooking'])->name('admin.bookings.approve');
     Route::post('/bookings/{id}/reject', [BookingController::class, 'rejectBooking'])->name('admin.bookings.reject');
     Route::post('/bookings/{id}/complete', [BookingController::class, 'completeBooking'])->name('admin.bookings.complete');
+
+    Route::patch('/settings/notifications', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
+    Route::delete('/settings/notifications/locations/{id}', [AdminController::class, 'destroyLocation'])->name('admin.locations.destroy');
 });
 
 

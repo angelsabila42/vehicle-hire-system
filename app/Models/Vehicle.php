@@ -41,6 +41,31 @@ class Vehicle extends Model
         return $this->hasMany(Booking::class);
     }
 
+    public function pickupLocation()
+    {
+        return $this->belongsTo(PickupLocation::class, 'pickup_location_id');
+    }
+
+    public static function getMonthlyTrend()
+    {
+        $thisMonth = self::where('created_at', '>=', now()->startOfMonth())->count();
+        $lastMonth = self::whereBetween('created_at', [
+            now()->subMonth()->startOfMonth(),
+            now()->subMonth()->endOfMonth()
+        ])->count();
+
+        $difference = $thisMonth - $lastMonth;
+
+        if($difference > 0) {
+            return "+$difference this month";
+        } elseif($difference < 0) {
+            return "$difference this month";
+        } else {
+            return "No change this month";
+        }
+
+    }
+
      protected $primaryKey = 'VehicleId';
 
 

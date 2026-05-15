@@ -1,7 +1,7 @@
-@props(['title', 'value', 'trend' => null, 'icon', 'color'])
+@props(['title', 'value', 'trend' => null, 'icon', 'color', 'link' => '#'])
 
 @php
-    // These colors match the soft pastel backgrounds in your Figma design
+
     $iconColors = [
         'blue'   => 'bg-blue-50 text-blue-600',
         'green'  => 'bg-green-50 text-green-600',
@@ -11,7 +11,7 @@
     ];
 @endphp
 
-<div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+<a href="{{ $link }}" class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
     <div class="flex flex-col h-full justify-between">
         <div class="p-3 w-fit rounded-2xl {{ $iconColors[$color] ?? 'bg-gray-50 text-gray-600' }} mb-6">
             <i data-lucide="{{ $icon }}" class="w-6 h-6"></i>
@@ -30,4 +30,4 @@
             </div>
         @endif
     </div>
-</div>
+</a>
