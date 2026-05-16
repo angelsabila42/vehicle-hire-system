@@ -9,9 +9,14 @@ class VehicleController extends Controller
 {
 
 
-public function index(Request $request)
+    public function index(Request $request)
     {
+        $status = $request->query('status');
+
         $query = Vehicle::query();
+        if ($status && $status !== 'All') {
+            $query->where('status', $status);
+        }
 
         if ($search = $request->query('search')) {
             $query->where(function ($sub) use ($search) {
@@ -28,11 +33,11 @@ public function index(Request $request)
         }
 
         if ($minPrice = $request->query('min_price')) {
-            $query->where('price', '>=', intval($minPrice));
+            $query->where('price', '>=', floatval($minPrice));
         }
 
         if ($maxPrice = $request->query('max_price')) {
-            $query->where('price', '<=', intval($maxPrice));
+            $query->where('price', '<=', floatval($maxPrice));
         }
 
         $sort = $request->query('sort', 'price_asc');
@@ -42,7 +47,7 @@ public function index(Request $request)
             $query->orderBy('price', 'asc');
         }
 
-        $vehicles = $query->get();
+        $vehicles = $query->paginate(12)->withQueryString();
         $categories = Vehicle::query()
             ->select('category')
             ->distinct()
@@ -51,13 +56,14 @@ public function index(Request $request)
             ->values()
             ->all();
 
-        return view('customer.vehicles', compact('vehicles', 'categories'));
+        return view('customer.vehicles', compact('vehicles', 'categories', 'status'));
     }
 
-  public function adminVehicleIndex()
+
+    public function adminVehicleIndex()
     {
         $vehicles = Vehicle::orderBy('name')->get();
-        $statusOptions = ['Available','Not Available'];
+        $statusOptions = ['Available', 'Not Available'];
 
         return view('admin.vehicles', compact('vehicles', 'statusOptions'));
     }
@@ -74,7 +80,7 @@ public function index(Request $request)
     /**
      * Store a newly created resource in storage.
      */
-      public function store(Request $request)
+    public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -117,9 +123,9 @@ public function index(Request $request)
         return view('customer.vehicle-show', compact('vehicle'));
     }
 
-     public function show()
+    public function show()
     {
-    //return view('customer.vehicle-show');
+        //return view('customer.vehicle-show');
     }
 
     /**

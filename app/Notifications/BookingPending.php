@@ -28,7 +28,12 @@ class BookingPending extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        if (!$notifiable->notify_bookings_pending) {
+            return [];
+        }
+
+        //Send to the database
+        return ['database'];
     }
 
     /**

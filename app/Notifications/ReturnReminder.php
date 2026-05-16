@@ -8,9 +8,10 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Booking;
 
-class BookingCancelled extends Notification
+class ReturnReminder extends Notification
 {
     use Queueable;
+
     protected Booking $booking;
 
     /**
@@ -26,14 +27,8 @@ class BookingCancelled extends Notification
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable)
+    public function via(object $notifiable): array
     {
-
-        if (!$notifiable->notify_bookings_cancelled) {
-            return [];
-        }
-
-        //Send to the database
         return ['database'];
     }
 
@@ -63,12 +58,12 @@ class BookingCancelled extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title' => 'Booking Cancelled',
-            'message' => 'Booking ' . $this->booking->id . ' has been cancelled',
-            'icon' => 'times',
-            'type' => 'booking_cancelled',
-            'bg_color' => 'bg-red-100',
-            'icon_color' => 'text-red-600',
+            'title' => 'Return Reminder',
+            'message' => 'Your vehicle return is scheduled for tomorrow',
+            'icon' => 'warning',
+            'type' => 'return_reminder',
+            'bg_color' => 'bg-orange-100',
+            'icon_color' => 'text-orange-600',
             'booking_id' => $this->booking->id,
         ];
     }

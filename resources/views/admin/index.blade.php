@@ -6,10 +6,10 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <x-stats-card title="Total Vehicles" value="24" trend="+2 this month" icon="car" color="blue" />
-            <x-stats-card title="Available Vehicles" value="16" trend="Ready to rent" icon="check-circle" color="green" />
-            <x-stats-card title="Active Bookings" value="8" trend="3 ending today" icon="clock" color="yellow" />
-            <x-stats-card title="Pending Requests" value="6" trend="Action required" icon="calendar" color="purple" />
+            <x-stats-card title="Total Vehicles" :value="$totalVehicles" :trend="$vehicleTrend" icon="car" color="blue" :link="route('admin.vehicles')"/>
+            <x-stats-card title="Available Vehicles" :value="$availableVehicles" trend="Ready to rent" icon="check-circle" color="green" :link="route('admin.vehicles', ['status', 'Available'])"/>
+            <x-stats-card title="Active Bookings" :value="$activeBookings" :trend="$bookingEnd" icon="clock" color="yellow" :link="route('admin.bookings', ['status', 'Confirmed'])"/>
+            <x-stats-card title="Pending Requests" :value="$pendingBookings" trend="Action required" icon="calendar" color="purple" :link="route('admin.bookings', ['status', 'Pending'])"/>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
