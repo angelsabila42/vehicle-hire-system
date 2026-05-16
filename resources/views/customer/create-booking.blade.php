@@ -26,8 +26,11 @@
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-bold text-slate-900 mb-3">Pickup Location</label>
-                                <select class="w-full bg-gray-50 border-none rounded-2xl p-5 text-slate-900 focus:ring-2 focus:ring-slate-900 transition appearance-none">
-                                    <option>Kampala - City Center</option>
+                                <select name="pickup_location_id" class="w-full bg-gray-50 border-none rounded-2xl p-5 text-slate-900 focus:ring-2 focus:ring-slate-900 transition appearance-none">
+                                   <option value="">Select Pickup Location</option>
+                                    @foreach($pickupLocations as $location)
+                                        <option value="{{ $location->id }}">{{ $location->address }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

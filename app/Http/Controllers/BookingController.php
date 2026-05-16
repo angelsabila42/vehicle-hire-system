@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Vehicle;
+use App\Models\PickUpLocation;
 use App\Notifications\BookingPending;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -80,8 +81,9 @@ class BookingController extends Controller
     public function showBookingForm(string $id)
     {
         $vehicle = Vehicle::findOrFail($id);
+        $pickupLocations = PickUpLocation::all();
 
-        return view('customer.create-booking', compact('vehicle'));
+        return view('customer.create-booking', compact('vehicle', 'pickupLocations'));
     }
 
     /**
