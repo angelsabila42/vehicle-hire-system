@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VehicleController extends Controller
 {
@@ -13,7 +14,9 @@ class VehicleController extends Controller
     {
         $status = $request->query('status');
 
+
         $query = Vehicle::query();
+
         if ($status && $status !== 'All') {
             $query->where('status', $status);
         }
@@ -47,7 +50,7 @@ class VehicleController extends Controller
             $query->orderBy('price', 'asc');
         }
 
-        $vehicles = $query->paginate(12)->withQueryString();
+        $vehicles = $query->where('status', 'Available')->paginate(12)->withQueryString();
         $categories = Vehicle::query()
             ->select('category')
             ->distinct()

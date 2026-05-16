@@ -60,7 +60,7 @@ class BookingController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-
+        
         $bookings = Booking::with('vehicle')
             ->where('user_id', Auth::id())
             ->get();
