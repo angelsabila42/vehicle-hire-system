@@ -79,7 +79,7 @@
             <div class="mb-10 pt-10 border-t border-gray-100">
                 <h3 class="text-xl text-slate-900 mb-6">Features</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-y-4">
-                    @foreach($vehicle->features as $feature)
+                    @foreach($vehicle->features ?? [] as $feature)
                     <div class="flex items-center text-gray-600">
                         <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mr-3"></div>
                         <span class="font-medium">{{ $feature }}</span>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('customer.booking.create', $vehicle->id) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
+                <a href="{{ route('customer.booking.create', $vehicle->VehicleId) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
                     Book Now
                 </a>
 

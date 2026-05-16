@@ -56,7 +56,7 @@
         <!-- Vehicles Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($vehicles as $vehicle)
-                <a href="{{ route('customer.vehicles.show.details', $vehicle->id) }}" class="group bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-slate-100/50 overflow-hidden relative transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)]">
+                <a href="{{ route('customer.vehicles.show.details', $vehicle->VehicleId) }}" class="group bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-slate-100/50 overflow-hidden relative transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)]">
                     <!-- Availability Overlay -->
                     @if(!$vehicle->is_available)
                         <div class="absolute inset-0 z-20 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center p-8">
