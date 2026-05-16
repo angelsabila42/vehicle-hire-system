@@ -3,30 +3,41 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
     protected $fillable = [
         'user_id',
-        'vehicle_id', 
-        'start_date',
-        'end_date',
-        'status'
+        'vehicle_id',
+        'status',
+        'pickUpLocation',
+        'payment',
+        'startDate',
+        'endDate'
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date'
+        'pickUpLocation' => 'array',
     ];
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function vehicle(): BelongsTo
+    public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);
+    }
+
+    public function pickupLocation()
+    {
+        return $this->belongsTo(PickupLocation::class, 'pickup_location_id');
+    }
+
+    public static function getEndingTodayCount()
+    {
+        $count = self::whereDate('endDate', now())->count();
+        return $count . " ending today";
     }
 }

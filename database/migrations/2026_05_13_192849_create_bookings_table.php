@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+       Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('vehicle_id')->constrained('vehicles', 'VehicleId')->onDelete('cascade');
+            $table->foreignId('pickup_location_id')
+              ->nullable() 
+              ->constrained('pickup_locations')
+              ->onDelete('restrict');
+            $table->string('status')->default('pending');
+            $table->json('pickUpLocation');
+            $table->string('payment')->nullable();
+            $table->json('features')->nullable();
+            $table->date('startDate');
+            $table->date('endDate');
+            $table->timestamps();
+});
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('bookings');
+    }
+};

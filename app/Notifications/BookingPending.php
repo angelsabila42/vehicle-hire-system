@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use App\Models\Booking; 
+
+class BookingPending extends Notification
+{
+    use Queueable;
+        protected Booking $booking;
+
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct(Booking $booking)
+    {
+        $this->booking = $booking;
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @return array<int, string>
+     */
+    public function via(object $notifiable): array
+    {
+        if (!$notifiable->notify_bookings_pending) {
+            return [];
+        }
+
+        //Send to the database
+        return ['database'];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public function toDatabase($notifiable)
+    {
+        return [
+            'title' => 'Booking Pending',
+            'message' => 'Booking ' . $this->booking->id . ' is pending',
+            'icon' => 'alarm-clock',
+            'type' => 'booking_pending',
+            'bg_color' => 'bg-yellow-100',
+            'icon_color' => 'text-yellow-600',
+            'booking_id' => $this->booking->id,
+        ];
+    }
+}
