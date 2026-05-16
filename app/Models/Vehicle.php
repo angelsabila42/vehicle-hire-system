@@ -46,6 +46,8 @@ class Vehicle extends Model
         return $this->belongsTo(PickupLocation::class, 'pickup_location_id');
     }
 
+    protected $primaryKey = 'VehicleId';
+
     public static function getMonthlyTrend()
     {
         $thisMonth = self::where('created_at', '>=', now()->startOfMonth())->count();
@@ -65,10 +67,6 @@ class Vehicle extends Model
         }
 
     }
-
-     protected $primaryKey = 'id';
-
-
 }
    
   
