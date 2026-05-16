@@ -100,7 +100,7 @@
                                         <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Per day</p>
                                         <p class="text-lg font-bold text-slate-900">UGX {{ number_format($vehicle->price) }}</p>
                                     </div>
-                                    <div class="p-3 bg-slate-900 text-white rounded-2xl group-hover:bg-blue-600 transition-colors">
+                                    <div class="p-3 bg-slate-900 text-white rounded-2xl group-hover:bg-violet-600 transition-colors">
                                         <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
                                     </div>
                                 </div>

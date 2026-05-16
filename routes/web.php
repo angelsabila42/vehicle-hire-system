@@ -49,7 +49,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::delete('/notifications/clear', [NotificationController::class, 'clearAll'])->name('notifications.clear');
+    Route::get('/welcome', function () {
+    return view('welcome');
 });
+    
+});
+
+
+
+
 
 
 require __DIR__.'/auth.php';
