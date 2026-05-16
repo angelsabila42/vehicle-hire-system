@@ -16,13 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('vehicle_id')->constrained('vehicles', 'VehicleId')->onDelete('cascade');
             $table->foreignId('pickup_location_id')
-              ->nullable() 
+              ->nullable()
               ->constrained('pickup_locations')
               ->onDelete('restrict');
-            $table->string('status')->default('pending');
-            $table->json('pickUpLocation');
+            $table->string('status')->default('Pending');
             $table->string('payment')->nullable();
-            $table->json('features')->nullable();
             $table->date('startDate');
             $table->date('endDate');
             $table->timestamps();
