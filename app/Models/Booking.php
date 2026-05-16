@@ -6,18 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'user_id',
         'vehicle_id',
+        'pickup_location_id',
         'status',
-        'pickUpLocation',
         'payment',
         'startDate',
-        'endDate'
+        'endDate',
+        'reminder_sent'
     ];
 
     protected $casts = [
-        'pickUpLocation' => 'array',
+        'reminder_sent' => 'boolean',
     ];
 
      // Booking belongs to User

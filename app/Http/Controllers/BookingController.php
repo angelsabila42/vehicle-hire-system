@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Vehicle;
+use App\Models\PickupLocation;
 use App\Notifications\BookingPending;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -60,7 +61,7 @@ class BookingController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-
+        
         $bookings = Booking::with('vehicle')
             ->where('user_id', Auth::id())
             ->get();
@@ -80,8 +81,9 @@ class BookingController extends Controller
     public function showBookingForm(string $id)
     {
         $vehicle = Vehicle::findOrFail($id);
+        $pickupLocations = PickupLocation::all();
 
-        return view('customer.create-booking', compact('vehicle'));
+        return view('customer.create-booking', compact('vehicle', 'pickupLocations'));
     }
 
     /**
@@ -94,12 +96,31 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'vehicle_id' => 'required|exists:vehicles,id',
-            'pickUpLocation' => 'required|string|max:255',
-            'payment' => 'nullable|string|max:255',
-            'startDate' => 'required|date|after_or_equal:today',
-            'endDate' => 'required|date|after_or_equal:startDate',
+            'vehicle_id'     => 'required|exists:vehicles,VehicleId',
+            'pickup_location_id' => 'required|exists:pickup_locations,id',
+            'payment'        => 'nullable|string|max:255',
+            'startDate'      => 'required|date|after_or_equal:today',
+            'endDate'        => 'required|date|after_or_equal:startDate',
         ]);
+
+        // Double booking validation
+        $existingBooking = Booking::where('vehicle_id', $request->vehicle_id)
+            ->whereNotIn('status', ['Rejected', 'Cancelled'])
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('startDate', [$request->startDate, $request->endDate])
+                      ->orWhereBetween('endDate', [$request->startDate, $request->endDate])
+                      ->orWhere(function ($q) use ($request) {
+                          $q->where('startDate', '<=', $request->startDate)
+                            ->where('endDate', '>=', $request->endDate);
+                      });
+            })
+            ->exists();
+
+        if ($existingBooking) {
+            return redirect()->back()->withErrors([
+                'dates' => 'Vehicle is not available for the selected dates.'
+            ])->withInput();
+        }
 
         $data['user_id'] = Auth::id();
         $data['status'] = 'Pending';
@@ -107,7 +128,6 @@ class BookingController extends Controller
         $booking = Booking::create($data);
 
         $admins = User::where('role', 'admin')->get();
-        //Trigger Notification to Admin
         Notification::send($admins, new BookingPending($booking));
 
         return redirect()->route('customer.bookings')->with('success', 'Booking request submitted successfully.');

@@ -21,9 +21,7 @@ class BookingSeeder extends Seeder
                 'user_id' => $user->id,
                 'vehicle_id' => $vehicle->VehicleId,
                 'pickup_location_id' => $location->id,
-                
-                'status' => 'pending',
-                'pickUpLocation' => $location->address,
+                'status' => 'Pending',
                 'payment' => 'Credit Card',
                 'startDate' => now()->addDays(1)->toDateString(),
                 'endDate' => now()->addDays(3)->toDateString(),
