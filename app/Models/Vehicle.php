@@ -66,7 +66,7 @@ class Vehicle extends Model
 
     }
 
-     protected $primaryKey = 'VehicleId';
+     protected $primaryKey = 'id';
 
 
 }
