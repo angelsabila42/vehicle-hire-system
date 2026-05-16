@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->integer('passengers')->after('type')->default(4);
-            $table->boolean('insurance')->after('passengers')->default(true);
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role')->default('customer')->after('email');
+            $table->string('location')->nullable()->after('role');
         });
     }
 
@@ -22,9 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->dropColumn('passengers');
-            $table->dropColumn('insurance');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['role', 'location']);
         });
     }
 };

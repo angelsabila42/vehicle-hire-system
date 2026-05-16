@@ -16,6 +16,10 @@ class Booking extends Model
         'endDate'
     ];
 
+    protected $casts = [
+        'pickUpLocation' => 'array',
+    ];
+
      // Booking belongs to User
     public function user()
     {
@@ -26,6 +30,15 @@ class Booking extends Model
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);
+    }
+
+    public function  pickupLocation(){
+        return $this->belongsTo(PickupLocation::class, 'pickup_location_id');
+    }
+
+    public static function getEndingTodayCount(){
+        $count = self::whereDate('endDate', now())->count();
+        return $count . " ending today";
     }
 
 }

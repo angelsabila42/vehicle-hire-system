@@ -110,7 +110,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('customer.booking.create', $vehicle->id) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
+                <a href="{{ route('customer.booking.create', $vehicle->VehicleId) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
                     Book Now
                 </a>
 
