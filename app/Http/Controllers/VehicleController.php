@@ -115,6 +115,8 @@ class VehicleController extends Controller
             'features' => 'nullable|array',
             'features.*' => 'nullable|string|max:255',
             'image' => 'nullable|image|max:2048',
+            'sub_images' => 'nullable|array',             
+            'sub_images.*' => 'nullable|image|max:2048',
         ]);
 
         $data['type'] = $data['category'] ?? 'Five Seater';
@@ -122,8 +124,20 @@ class VehicleController extends Controller
         $data['location'] = $data['location'] ?? 'Nairobi';
         $data['features'] = $request->input('features', []);
 
+        //Image
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('vehicles', 'public');
+        $data['image_path'] = $request->file('image')->store('vehicles', 'public');
+        }
+
+        //Sub images
+        if ($request->hasFile('sub_images')) {
+        $uploadedPaths = [];
+        foreach ($request->file('sub_images') as $index => $file) {
+            
+            $path = $file->store('vehicles/sub', 'public');
+            $uploadedPaths[] = $path;
+        }
+        $data['sub_images'] = $uploadedPaths;
         }
 
         Vehicle::create($data);
@@ -177,15 +191,30 @@ class VehicleController extends Controller
             'features' => 'nullable|array',
             'features.*' => 'nullable|string|max:255',
             'image' => 'nullable|image|max:2048',
+            'sub_images' => 'nullable|array',             
+            'sub_images.*' => 'nullable|image|max:2048',
         ]);
+
+        //Image
+        if ($request->hasFile('image')) {
+        $data['image_path'] = $request->file('image')->store('vehicles', 'public');
+        }
+
+        //Sub images
+        if ($request->hasFile('sub_images')) {
+        $uploadedPaths = [];
+        foreach ($request->file('sub_images') as $index => $file) {
+            
+            $path = $file->store('vehicles/sub', 'public');
+            $uploadedPaths[] = $path;
+        }
+        $data['sub_images'] = $uploadedPaths;
+        }
 
         $data['type'] = $data['category'] ?? $vehicle->type;
         unset($data['category']);
         $data['features'] = $request->input('features', []);
 
-        if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('vehicles', 'public');
-        }
 
         $vehicle->update($data);
 

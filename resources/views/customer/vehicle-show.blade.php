@@ -7,14 +7,22 @@
             </a>
         </div>
 
-        <div class="space-y-4 mb-8">
-            <div class="w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-sm">
-                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="{{ $vehicle->name }}">
+        <div class="flex flex-col gap-6 mb-8">
+            <div class="w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-sm bg-slate-100">
+                @if($vehicle->image_url)
+                <img src="{{ asset($vehicle->image_url) ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="{{ $vehicle->make }} {{ $vehicle->model }}">
+                @else
+                <img src="{{ asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="Default Vehicle Placeholder">
+                @endif
             </div>
-            <div class="grid grid-cols-2 gap-4 h-64">
-                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
-                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
+
+            @if(!empty($vehicle->sub_images) && count($vehicle->sub_images) > 0)
+            <div class="grid grid-cols-2 md:grid-cols-{{ min(count($vehicle->sub_images), 4) }} gap-4 h-64">
+                @foreach($vehicle->sub_images as $sub_image)
+                <img src="{{ asset('storage/' .$sub_image) }}" class="w-full h-full object-cover rounded-[2rem]" alt="Additional view">
+                @endforeach
             </div>
+            @endif
         </div>
 
         <div class="bg-white rounded-[1.0rem] p-8 border border-gray-50">
@@ -72,7 +80,7 @@
             <div class="mb-10">
                 <h3 class="text-xl text-slate-900 mb-4">About this vehicle</h3>
                 <p class="text-gray-500 leading-relaxed">
-                            {{ $vehicle->description }}
+                    {{ $vehicle->description }}
                 </p>
             </div>
 
