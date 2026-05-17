@@ -77,11 +77,17 @@
                         </td>
                         <td class="px-8 py-6">
                             <span class="px-3 py-1.5 rounded-lg text-[11px] font-extrabold tracking-tight
-                                {{ $booking->status === 'Confirmed'  ? 'bg-green-50 text-green-600' :
-                                   ($booking->status === 'Pending'   ? 'bg-amber-50 text-amber-600' :
-                                   ($booking->status === 'Completed' ? 'bg-gray-100 text-gray-500' :
-                                   ($booking->status === 'Rejected'  ? 'bg-red-50 text-red-600' :
-                                   ($booking->status === 'Cancelled' ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-500')))) }}">
+                                @if($booking->status == 'Pending')
+                                    bg-amber-50 text-amber-600
+                                @elseif($booking->status == 'Confirmed')
+                                    bg-emerald-50 text-emerald-600
+                                @elseif($booking->status == 'Rejected')
+                                    bg-red-50 text-red-600
+                                @elseif($booking->status == 'Completed')
+                                    bg-blue-50 text-blue-600
+                                @else
+                                    bg-gray-50 text-gray-600
+                                @endif ">
                                 {{ $booking->status }}
                             </span>
                         </td>

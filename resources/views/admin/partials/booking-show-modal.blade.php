@@ -101,12 +101,18 @@
                 </div>
 
                 <div class="p-8 bg-white border-t border-gray-50 flex gap-4">
-                    <button class="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-bold hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-100">
+                    <form :action="'{{ url('/admin/bookings') }}/' + selectedBooking.id + '/approve'" method="POST" class="flex-1">
+                    @csrf
+                        <button type="submit" class="w-full py-4 bg-emerald-500 text-white rounded-2xl font-bold hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-100">
                         Approve
-                    </button>
-                    <button class="flex-1 py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-100">
+                        </button>
+                    </form>
+                   <form :action="'{{ url('/admin/bookings') }}/' + selectedBooking.id + '/reject'" method="POST" class="flex-1">
+                   @csrf
+                        <button type="submit" class="w-full py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-100">
                         Reject
-                    </button>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
