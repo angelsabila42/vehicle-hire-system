@@ -19,7 +19,7 @@
                     <article class="group bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300">
                         <a href="{{ route('customer.booking.history.show', $booking->id) }}" class="block">
                             <div class="flex flex-col md:flex-row md:items-center gap-6">
-                                <img src="{{ asset('images/' . $booking->vehicle->image) }}" alt="{{ $booking->vehicle->name }}"
+                                <img src="{{ $booking->vehicle->image_url ?? asset('images/hire-logo2.png') }}" alt="{{ $booking->vehicle->make }} {{ $booking->vehicle->model }}"
                                     class="w-full md:w-64 h-40 object-cover rounded-2xl shadow-sm">
 
                                 <div class="flex-1 min-w-0">
@@ -44,7 +44,7 @@
                                         </div>
                                         <div>
                                             <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Pickup Location</p>
-                                            <p class="text-sm font-semibold text-slate-700">{{ $booking->pickUpLocation }}</p>
+                                            <p class="text-sm font-semibold text-slate-700">{{ $booking->pickupLocation->address ?? 'N/A' }}</p>
                                         </div>
                                     </div>
 

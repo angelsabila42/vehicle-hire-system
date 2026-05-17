@@ -56,7 +56,7 @@
         <!-- Vehicles Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($vehicles as $vehicle)
-                <a href="{{ route('customer.vehicles.show.details', $vehicle->id) }}" class="group bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-slate-100/50 overflow-hidden relative transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)]">
+                <a href="{{ route('customer.vehicles.show.details', $vehicle->VehicleId) }}" class="group bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-slate-100/50 overflow-hidden relative transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)]">
                     <!-- Availability Overlay -->
                     @if(!$vehicle->is_available)
                         <div class="absolute inset-0 z-20 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center p-8">
@@ -68,7 +68,7 @@
 
                     <!-- Vehicle Image -->
                     <div class="relative h-64 overflow-hidden">
-                        <img src="{{ asset('images/' . $vehicle->image) }}" class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110">
+                        <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110" alt="{{ $vehicle->make }} {{ $vehicle->model }}">
                         @if($vehicle->is_available)
                             <div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <div class="bg-emerald-50/90 backdrop-blur-md px-4 py-1.5 rounded-xl border border-emerald-100">
@@ -82,7 +82,7 @@
                     <div class="p-8">
                         <div class="flex justify-between items-start mb-6">
                             <div>
-                                <h3 class="text-2xl text-slate-900 mb-1">{{ $vehicle->name }}</h3>
+                                <h3 class="text-2xl text-slate-900 mb-1">{{ $vehicle->make }} {{ $vehicle->model }}</h3>
                                 <p class="text-gray-400 text-[11px] tracking-[0.25em] mb-4">{{ $vehicle->category }}</p>
                                 <p class="text-gray-400 text-[11px] tracking-[0.15em]">{{ $vehicle->passengers }} passengers • {{ $vehicle->transmission }}</p>
                             </div>

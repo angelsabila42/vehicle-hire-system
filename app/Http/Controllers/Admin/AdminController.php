@@ -13,25 +13,29 @@ class AdminController extends Controller
 {
     public function index()
     {
-            /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $totalVehicles = Vehicle::where('manager_id', $user->id)->count();
-        $availableVehicles = Vehicle::where('manager_id', $user->id)->where('status', 'available')->count();
+        $totalVehicles = Vehicle::count();
+        $availableVehicles = Vehicle::where('status', 'Available')->count();
+        $onRentVehicles = Vehicle::whereIn('status', ['Booked', 'Rented', 'On Rent'])->count();
+        $maintenanceVehicles = Vehicle::whereIn('status', ['Maintenance', 'Under Maintenance'])->count();
 
-        $activeBookings = Booking::where('status', 'confirmed')->count();
-        $pendingBookings = Booking::where('status', 'pending')->count();
+        $availablePercent = $totalVehicles > 0 ? round(($availableVehicles / $totalVehicles) * 100) : 0;
+        $onRentPercent = $totalVehicles > 0 ? round(($onRentVehicles / $totalVehicles) * 100) : 0;
+        $maintenancePercent = $totalVehicles > 0 ? round(($maintenanceVehicles / $totalVehicles) * 100) : 0;
+
+        $activeBookings = Booking::where('status', 'Confirmed')->count();
+        $pendingBookings = Booking::where('status', 'Pending')->count();
 
         $vehicleTrend = Vehicle::getMonthlyTrend();
         $bookingEnd = Booking::getEndingTodayCount();
 
-        $user = Auth::user();
-
-        $vehicles = Vehicle::where('manager_id', $user->id)->get();
-
         return view('admin.index', compact(
-            'vehicles',
             'activeBookings',
             'availableVehicles',
+            'onRentVehicles',
+            'maintenanceVehicles',
+            'availablePercent',
+            'onRentPercent',
+            'maintenancePercent',
             'pendingBookings',
             'totalVehicles',
             'vehicleTrend',

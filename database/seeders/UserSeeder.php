@@ -12,16 +12,18 @@ class UserSeeder extends Seeder
     {
         // Create Admin User
         User::create([
-            'name' => 'Admin Users',
-            'email' => 'myriambte47@gmail.com',
-            'password' => Hash::make('queen123'),
+            'name' => 'Admin User',
+            'email' => 'admin@vehiclehire.test',
+            'password' => 'Password123!',
+            'role' => 'admin',
         ]);
 
         // Create Customer User
         User::create([
             'name' => 'Test Customer',
             'email' => 'customer@example.com',
-            'password' => Hash::make('password'),
+            'password' => 'password',
+            'role' => 'customer',
         ]);
     }
 }

@@ -13,29 +13,30 @@
 
         <div class="p-8 pb-4 flex justify-between items-center">
             <h2 class="text-2xl font-extrabold text-slate-900" 
-                x-text="currentVehicle.id ? 'Edit Vehicle' : 'Add New Vehicle'"></h2>
+                x-text="vehicleId() ? 'Edit Vehicle' : 'Add New Vehicle'"></h2>
             <button @click="addModalOpen = false; editModalOpen = false" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <i data-lucide="x" class="w-6 h-6 text-gray-400"></i>
             </button>
         </div>
 
-        <form :action="currentVehicle.id ? '/admin/vehicles/' + currentVehicle.id : '{{ route('admin.vehicles.store') }}'" 
+        <form :action="vehicleId() ? '{{ url('/admin/vehicles') }}/' + vehicleId() : '{{ route('admin.vehicles.store') }}'" 
               method="POST" 
               enctype="multipart/form-data" 
               class="flex-grow overflow-y-auto p-8 pt-0 space-y-6">
             
             @csrf
-            <template x-if="currentVehicle.id">
+            <template x-if="vehicleId()">
                 <input type="hidden" name="_method" value="PUT">
             </template>
 
             <div class="space-y-2">
                 <label class="text-sm font-bold text-slate-700 ml-1">Vehicle Image</label>
                 <div @click="$refs.mainImage.click()" class="border-2 border-dashed border-gray-100 rounded-[2rem] p-12 flex flex-col items-center justify-center bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer group relative overflow-hidden min-h-[200px]">
-                    <template x-if="imagePreview">
-                        <img :src="imagePreview" class="absolute inset-0 w-full h-full object-cover">
+                    {{-- Support both new previews and existing seeded images --}}
+                    <template x-if="imagePreview || currentVehicle.image_url">
+                        <img :src="imagePreview || currentVehicle.image_url" class="absolute inset-0 w-full h-full object-cover">
                     </template>
-                    <div class="relative z-10 flex flex-col items-center" x-show="!imagePreview">
+                    <div class="relative z-10 flex flex-col items-center" x-show="!imagePreview && !currentVehicle.image_url">
                         <div class="bg-white p-4 rounded-2xl shadow-sm mb-3 group-hover:scale-110 transition-transform">
                             <i data-lucide="image" class="w-8 h-8 text-slate-400"></i>
                         </div>
@@ -47,41 +48,44 @@
 
             <div class="grid grid-cols-2 gap-6">
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Vehicle Name *</label>
-                    <input type="text" name="name" x-model="currentVehicle.name" 
-                           :placeholder="currentVehicle.id ? '' : 'e.g. Toyota Rav4'"
+                    <label class="text-sm font-bold text-slate-700 ml-1">Make *</label>
+                    <input type="text" name="make" x-model="currentVehicle.make" 
+                           :placeholder="currentVehicle.id ? '' : 'e.g. Toyota'"
                            class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900 transition-all">
                 </div>
 
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Category *</label>
-                    <select name="type" x-model="currentVehicle.type" class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Model *</label>
+                    <input type="text" name="model" x-model="currentVehicle.model" 
+                           :placeholder="currentVehicle.id ? '' : 'e.g. Rav4'"
+                           class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900 transition-all">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Category</label>
+                    <select name="category" x-model="currentVehicle.category" class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900">
                         <option value="">Select category</option>
-                        <option value="SUV">SUV</option>
-                        <option value="Sedan">Sedan</option>
-                        <option value="Van">Van</option>
+                        <option value="Five Seater">Five Seater</option>
+                        <option value="Seven Seater">Seven Seater</option>
+                        <option value="Double Cabin">Double Cabin</option>
+                        <option value="Single Cabin">Single Cabin</option>
                     </select>
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-sm font-bold text-slate-700 ml-1">Daily Rate (UGX) *</label>
-                    <input type="number" name="price" x-model="currentVehicle.price" 
+                    <input type="number" name="price_per_day" x-model="currentVehicle.price_per_day" 
                            :placeholder="currentVehicle.id ? '' : 'e.g. 150000'"
                            class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-sm font-bold text-slate-700 ml-1">Availability Status *</label>
-                    <div class="relative">
-                        <select name="status" x-model="currentVehicle.status" class="w-full bg-gray-50 border-none rounded-2xl p-4 pr-12 text-sm font-medium focus:ring-2 focus:ring-slate-900 appearance-none">
-                            <template x-for="statusOption in statuses" :key="statusOption">
-                                <option :value="statusOption" x-text="statusOption"></option>
-                            </template>
-                        </select>
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                        </div>
-                    </div>
+                    <select name="status" x-model="currentVehicle.status" class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900">
+                        <option value="Available">Available</option>
+                        <option value="On Rent">On Rent</option>
+                        <option value="Maintenance">Maintenance</option>
+                    </select>
                 </div>
 
                 <div class="space-y-2">
@@ -91,7 +95,7 @@
 
                 <div class="space-y-2">
                     <label class="text-sm font-bold text-slate-700 ml-1">Plate Number *</label>
-                    <input x-model="currentVehicle.plate_number" type="text" name="plate_number" 
+                    <input x-model="currentVehicle.number_plate" type="text" name="number_plate" 
                            :placeholder="currentVehicle.id ? '' : 'e.g. UAH 123A'"
                            class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900">
                 </div>
@@ -106,7 +110,7 @@
 
                 <div class="space-y-2">
                     <label class="text-sm font-bold text-slate-700 ml-1">Fuel Type *</label>
-                    <select name="fuel" x-model="currentVehicle.fuel" class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900">
+                    <select name="fuel_type" x-model="currentVehicle.fuel_type" class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 focus:ring-slate-900">
                         <option value="Petrol">Petrol</option>
                         <option value="Diesel">Diesel</option>
                         <option value="Electric">Electric</option>
@@ -122,9 +126,9 @@
                     </button>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <template x-for="(feature, index) in currentVehicle.features" :key="index">
+                    <template x-for="(feature, index) in (currentVehicle.features || [])" :key="index">
                         <div class="flex items-center gap-2 bg-gray-50 border border-gray-100 px-3 py-2 rounded-xl">
-                            <input type="text" name="features[]" x-model="currentVehicle.features[index]" class="bg-transparent border-none p-0 text-xs font-bold text-slate-700 focus:ring-0 w-24">
+                            <input type="text" name="features[]" x-model="currentVehicle.features[index]" class="bg-transparent border-none p-0 text-xs font-bold text-slate-700 focus:ring-0 min-w-[100px]">
                             <button type="button" @click="removeFeature(index)" class="text-red-400 hover:text-red-600">
                                 <i data-lucide="x" class="w-3.5 h-3.5"></i>
                             </button>
@@ -140,9 +144,9 @@
                         <i data-lucide="image-plus" class="w-5 h-5 text-gray-400"></i>
                         <span class="text-[9px] font-bold text-gray-400 mt-1 uppercase">Add Photo</span>
                     </div>
-                    <template x-for="(url, index) in galleryPreviews" :key="index">
+                    <template x-for="(url, index) in (galleryPreviews || [])" :key="index">
                         <div class="relative w-24 h-24 shrink-0 rounded-2xl overflow-hidden group shadow-sm">
-                            <img :src="url" class="w-full h-full object-cover">
+                            <img :src="url.startsWith('blob:') ? url : '/storage/' + url" class="w-full h-full object-cover">
                             <button type="button" @click="galleryPreviews.splice(index, 1)" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
@@ -166,7 +170,7 @@
                 </button>
                 <button type="submit" 
                         class="flex-[2] py-4 bg-slate-900 text-white rounded-2xl font-bold shadow-xl shadow-slate-200 hover:bg-slate-800 transition-all"
-                        x-text="currentVehicle.id ? 'Update Vehicle' : 'Create Vehicle'">
+                        x-text="vehicleId() ? 'Update Vehicle' : 'Create Vehicle'">
                 </button>
             </div>
         </form>

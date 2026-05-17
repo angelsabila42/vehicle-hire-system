@@ -9,18 +9,18 @@
 
         <div class="space-y-4 mb-8">
             <div class="w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-sm">
-                <img src="{{ asset('images/rav4-main.jpg') }}" class="w-full h-full object-cover" alt="Toyota Rav4 Main">
+                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="{{ $vehicle->name }}">
             </div>
             <div class="grid grid-cols-2 gap-4 h-64">
-                <img src="{{ asset('images/rav4-interior.jpg') }}" class="w-full h-full object-cover rounded-[2rem]" alt="Interior">
-                <img src="{{ asset('images/rav4-rear.jpg') }}" class="w-full h-full object-cover rounded-[2rem]" alt="Rear view">
+                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
+                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
             </div>
         </div>
 
         <div class="bg-white rounded-[1.0rem] p-8 border border-gray-50">
             <div class="flex justify-between items-start mb-6">
                 <div>
-                    <h1 class="text-3xl text-slate-900 mb-1">{{$vehicle->name}}</h1>
+                    <h1 class="text-3xl text-slate-900 mb-1">{{ $vehicle->make }} {{ $vehicle->model }}</h1>
                     <p class="text-gray-400 font-medium">{{$vehicle->category}} • {{$vehicle->year}}</p>
                 </div>
                 <div class="flex items-center text-amber-400">
@@ -79,7 +79,7 @@
             <div class="mb-10 pt-10 border-t border-gray-100">
                 <h3 class="text-xl text-slate-900 mb-6">Features</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-y-4">
-                    @foreach($vehicle->features as $feature)
+                    @foreach($vehicle->features ?? [] as $feature)
                     <div class="flex items-center text-gray-600">
                         <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mr-3"></div>
                         <span class="font-medium">{{ $feature }}</span>
@@ -93,7 +93,7 @@
         <div class="lg:col-span-1">
             <div class="bg-white p-8 rounded-[1.0rem] border border-gray-100 shadow-xl sticky top-24">
                 <p class="text-gray-400 font-semibold text-sm tracking-tighter">Price per day</p>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-8">UGX {{ number_format($vehicle->price) }}</h2>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-8">UGX {{ number_format($vehicle->price_per_day) }}</h2>
 
                 <div class="space-y-4 mb-8">
                     <div class="flex items-center text-gray-500">
@@ -110,7 +110,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('customer.booking.create', $vehicle->id) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
+                <a href="{{ route('customer.booking.create', $vehicle->VehicleId) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
                     Book Now
                 </a>
 

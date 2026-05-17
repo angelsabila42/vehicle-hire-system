@@ -13,28 +13,79 @@ class Vehicle extends Model
         'make',
         'model',
         'name',
-        'category',
         'year',
-         'number_plate',
+        'number_plate',
         'price_per_day',
         'transmission',
         'fuel_type',
         'status',
-        'is_available',
         'rating',
         'description',
         'features',
         'location',
         'passengers',
-         'type',
+        'type',
         'insurance',
         'image_path',
+        
+    ];
+
+    protected $appends = [
+        'category',
+        'image_url',
+        'id',
     ];
 
     protected $casts = [
-        'is_available' => 'boolean',
         'features' => 'array',
     ];
+
+    public function getIdAttribute(): mixed
+    {
+        return $this->getKey();
+    }
+
+    public function getNameAttribute(): string
+    {
+        return trim(($this->attributes['make'] ?? '') . ' ' . ($this->attributes['model'] ?? ''));
+    }
+
+    public function getCategoryAttribute(): ?string
+    {
+        return $this->attributes['type'] ?? null;
+    }
+
+    public function getIsAvailableAttribute(): bool
+    {
+        return $this->status === 'Available';
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        $path = $this->image_path;
+
+        if (! $path) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        if (str_starts_with($path, 'vehicles/')) {
+            return asset('storage/' . $path);
+        }
+
+        if (str_starts_with($path, 'public/images/')) {
+            return asset(str_replace('public/', '', $path));
+        }
+
+        if (str_starts_with($path, 'images/')) {
+            return asset($path);
+        }
+
+        return asset('storage/' . ltrim($path, '/'));
+    }
 
     public function bookings()
     {
@@ -45,6 +96,8 @@ class Vehicle extends Model
     {
         return $this->belongsTo(PickupLocation::class, 'pickup_location_id');
     }
+
+    protected $primaryKey = 'VehicleId';
 
     public static function getMonthlyTrend()
     {
@@ -65,10 +118,6 @@ class Vehicle extends Model
         }
 
     }
-
-     protected $primaryKey = 'id';
-
-
 }
    
   
