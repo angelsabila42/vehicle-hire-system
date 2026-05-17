@@ -30,7 +30,7 @@ class Booking extends Model
     //Booking belongs to Vehicle
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'VehicleId');
     }
 
     public function  pickupLocation(){

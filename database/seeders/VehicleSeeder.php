@@ -17,19 +17,19 @@ class VehicleSeeder extends Seeder
             'price_per_day' => 40000,
             'status' => 'Available',
             'location' => 'Nairobi',
-            'image_path' => 'public/images/rav4_new.png',
+            'image_path' => 'images/rav4_new.png',
             'type' => 'Five Seater',
         ]);
 
         Vehicle::create([
-            'number_plate' => 'UAG 456B',
+            'number_plate' => 'UBG 456B',
             'make' => 'Honda',
             'model' => 'Accord',
             'year' => 2022,
             'price_per_day' => 40000,
             'status' => 'Available',
             'location' => 'Nairobi',
-            'image_path' => 'public/images/accord.jpg',
+            'image_path' => 'images/accord.jpg',
             'type' => 'Five Seater',
         ]);
 
@@ -41,7 +41,7 @@ class VehicleSeeder extends Seeder
             'price_per_day' => 45000,
             'status' => 'Available',
             'location' => 'Nairobi',
-            'image_path' => 'public/images/vanguard.jpg',
+            'image_path' => 'images/vanguard.jpg',
             'type' => 'Seven Seater',
         ]);
 
@@ -53,7 +53,7 @@ class VehicleSeeder extends Seeder
             'price_per_day' => 40000,
             'status' => 'Maintenance',
             'location' => 'Nairobi',
-            'image_path' => 'public/images/outback.jpg',
+            'image_path' => 'images/outback.jpg',
             'type' => 'Five Seater',
         ]);
 
@@ -65,7 +65,7 @@ class VehicleSeeder extends Seeder
             'price_per_day' => 45000,
             'status' => 'Available',
             'location' => 'Nairobi',
-            'image_path' => 'public/images/sienta.jpg',
+            'image_path' => 'images/sienta.jpg',
             'type' => 'Seven Seater',
         ]);
 
@@ -77,7 +77,7 @@ class VehicleSeeder extends Seeder
             'price_per_day' => 45000,
             'status' => 'Booked',
             'location' => 'Nairobi',
-            'image_path' => 'public/images/rav4_2018.png',
+            'image_path' => 'images/rav4_2018.png',
             'type' => 'Five Seater',
         ]);
 
@@ -89,7 +89,7 @@ class VehicleSeeder extends Seeder
             'price_per_day' => 70000,
             'status' => 'Available',
             'location' => 'Nairobi',
-            'image_path' => 'public/images/hilux.jpg',
+            'image_path' => 'images/hilux.jpg',
             'type' => 'Double Cabin',
         ]);
 

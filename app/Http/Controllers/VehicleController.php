@@ -23,38 +23,38 @@ class VehicleController extends Controller
 
         if ($search = $request->query('search')) {
             $query->where(function ($sub) use ($search) {
-                $sub->where('name', 'like', "%{$search}%")
-                    ->orWhere('make', 'like', "%{$search}%")
-                    ->orWhere('model', 'like', "%{$search}%");
+                $sub->where('make', 'like', "%{$search}%")
+                    ->orWhere('model', 'like', "%{$search}%")
+                    ->orWhere('number_plate', 'like', "%{$search}%");
             });
         }
 
         if ($category = $request->query('category')) {
             if ($category !== 'All') {
-                $query->where('category', $category);
+                $query->where('type', $category);
             }
         }
 
         if ($minPrice = $request->query('min_price')) {
-            $query->where('price', '>=', floatval($minPrice));
+            $query->where('price_per_day', '>=', floatval($minPrice));
         }
 
         if ($maxPrice = $request->query('max_price')) {
-            $query->where('price', '<=', floatval($maxPrice));
+            $query->where('price_per_day', '<=', floatval($maxPrice));
         }
 
         $sort = $request->query('sort', 'price_asc');
         if ($sort === 'price_desc') {
-            $query->orderBy('price', 'desc');
+            $query->orderBy('price_per_day', 'desc');
         } else {
-            $query->orderBy('price', 'asc');
+            $query->orderBy('price_per_day', 'asc');
         }
 
         $vehicles = $query->where('status', 'Available')->paginate(12)->withQueryString();
         $categories = Vehicle::query()
-            ->select('category')
+            ->select('type')
             ->distinct()
-            ->pluck('category')
+            ->pluck('type')
             ->filter()
             ->values()
             ->all();
@@ -63,12 +63,26 @@ class VehicleController extends Controller
     }
 
 
-    public function adminVehicleIndex()
+    public function adminVehicleIndex(Request $request)
     {
-        $vehicles = Vehicle::orderBy('name')->get();
-        $statusOptions = ['Available', 'Not Available'];
+        $status = $request->query('status');
 
-        return view('admin.vehicles', compact('vehicles', 'statusOptions'));
+        $query = Vehicle::query()->orderBy('make');
+
+        if ($status && $status !== 'All') {
+            if ($status === 'Rented') {
+                $query->whereIn('status', ['Rented', 'Booked', 'On Rent']);
+            } elseif ($status === 'Maintenance') {
+                $query->whereIn('status', ['Maintenance', 'Under Maintenance']);
+            } else {
+                $query->where('status', $status);
+            }
+        }
+
+        $vehicles = $query->get();
+        $statusOptions = ['Available', 'On Rent', 'Maintenance'];
+
+        return view('admin.vehicles', compact('vehicles', 'statusOptions', 'status'));
     }
 
 
@@ -86,17 +100,16 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'make' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
             'year' => 'nullable|digits:4|integer',
-            'plate_number' => 'nullable|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'number_plate' => 'nullable|string|max:255',
+            'price_per_day' => 'required|numeric|min:0',
             'transmission' => 'nullable|string|max:255',
             'fuel_type' => 'nullable|string|max:255',
             'status' => 'required|string|max:255',
-            'is_available' => 'nullable|boolean',
             'rating' => 'nullable|numeric|min:0|max:5',
             'description' => 'nullable|string',
             'features' => 'nullable|array',
@@ -104,11 +117,13 @@ class VehicleController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        $data['is_available'] = $request->boolean('is_available', true);
+        $data['type'] = $data['category'] ?? 'Five Seater';
+        unset($data['category']);
+        $data['location'] = $data['location'] ?? 'Nairobi';
         $data['features'] = $request->input('features', []);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('vehicles', 'public');
+            $data['image_path'] = $request->file('image')->store('vehicles', 'public');
         }
 
         Vehicle::create($data);
@@ -147,17 +162,16 @@ class VehicleController extends Controller
         $vehicle = Vehicle::findOrFail($id);
 
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'make' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
             'year' => 'nullable|digits:4|integer',
-            'plate_number' => 'nullable|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'number_plate' => 'nullable|string|max:255',
+            'price_per_day' => 'required|numeric|min:0',
             'transmission' => 'nullable|string|max:255',
             'fuel_type' => 'nullable|string|max:255',
             'status' => 'required|string|max:255',
-            'is_available' => 'nullable|boolean',
             'rating' => 'nullable|numeric|min:0|max:5',
             'description' => 'nullable|string',
             'features' => 'nullable|array',
@@ -165,11 +179,12 @@ class VehicleController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        $data['is_available'] = $request->boolean('is_available', true);
+        $data['type'] = $data['category'] ?? $vehicle->type;
+        unset($data['category']);
         $data['features'] = $request->input('features', []);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('vehicles', 'public');
+            $data['image_path'] = $request->file('image')->store('vehicles', 'public');
         }
 
         $vehicle->update($data);

@@ -24,7 +24,7 @@ class BookingController extends Controller
         $status = $request->query('status');
         $search = $request->query('search');
 
-        $query = Booking::with(['user', 'vehicle']);
+        $query = Booking::with(['user', 'vehicle', 'pickupLocation']);
 
         // Status Filter 
         if ($status && $status !== 'All') {

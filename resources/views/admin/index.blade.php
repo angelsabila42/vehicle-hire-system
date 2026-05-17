@@ -7,9 +7,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <x-stats-card title="Total Vehicles" :value="$totalVehicles" :trend="$vehicleTrend" icon="car" color="blue" :link="route('admin.vehicles')"/>
-            <x-stats-card title="Available Vehicles" :value="$availableVehicles" trend="Ready to rent" icon="check-circle" color="green" :link="route('admin.vehicles', ['status', 'Available'])"/>
-            <x-stats-card title="Active Bookings" :value="$activeBookings" :trend="$bookingEnd" icon="clock" color="yellow" :link="route('admin.bookings', ['status', 'Confirmed'])"/>
-            <x-stats-card title="Pending Requests" :value="$pendingBookings" trend="Action required" icon="calendar" color="purple" :link="route('admin.bookings', ['status', 'Pending'])"/>
+            <x-stats-card title="Available Vehicles" :value="$availableVehicles" trend="Ready to rent" icon="check-circle" color="green" :link="route('admin.vehicles', ['status' => 'Available'])"/>
+            <x-stats-card title="Active Bookings" :value="$activeBookings" :trend="$bookingEnd" icon="clock" color="yellow" :link="route('admin.bookings', ['status' => 'Confirmed'])"/>
+            <x-stats-card title="Pending Requests" :value="$pendingBookings" trend="Action required" icon="calendar" color="purple" :link="route('admin.bookings', ['status' => 'Pending'])"/>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -24,10 +24,10 @@
                                     <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
                                     <span class="text-sm font-bold text-slate-600">Available</span>
                                 </div>
-                                <span class="text-sm font-extrabold text-slate-900">16</span>
+                                <span class="text-sm font-extrabold text-slate-900">{{ $availableVehicles }}</span>
                             </div>
                             <div class="w-full bg-gray-100 rounded-full h-2.5">
-                                <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 66%"></div>
+                                <div class="bg-emerald-500 h-2.5 rounded-full" style="width: {{ $availablePercent }}%"></div>
                             </div>
                         </div>
                         <div>
@@ -36,10 +36,10 @@
                                     <span class="w-3 h-3 rounded-full bg-blue-500"></span>
                                     <span class="text-sm font-bold text-slate-600">On Rent</span>
                                 </div>
-                                <span class="text-sm font-extrabold text-slate-900">6</span>
+                                <span class="text-sm font-extrabold text-slate-900">{{ $onRentVehicles }}</span>
                             </div>
                             <div class="w-full bg-gray-100 rounded-full h-2.5">
-                                <div class="bg-blue-500 h-2.5 rounded-full" style="width: 25%"></div>
+                                <div class="bg-blue-500 h-2.5 rounded-full" style="width: {{ $onRentPercent }}%"></div>
                             </div>
                         </div>
                         <div>
@@ -48,10 +48,10 @@
                                     <span class="w-3 h-3 rounded-full bg-amber-500"></span>
                                     <span class="text-sm font-bold text-slate-600">Maintenance</span>
                                 </div>
-                                <span class="text-sm font-extrabold text-slate-900">2</span>
+                                <span class="text-sm font-extrabold text-slate-900">{{ $maintenanceVehicles }}</span>
                             </div>
                             <div class="w-full bg-gray-100 rounded-full h-2.5">
-                                <div class="bg-amber-500 h-2.5 rounded-full" style="width: 8%"></div>
+                                <div class="bg-amber-500 h-2.5 rounded-full" style="width: {{ $maintenancePercent }}%"></div>
                             </div>
                         </div>
                     </div>
@@ -103,14 +103,14 @@
                     <p class="text-slate-400 text-sm mb-8 font-medium">Manage your fleet efficiently</p>
                     
                     <div class="space-y-4">
-                        <button class="w-full py-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-bold transition-all text-left px-6 flex items-center justify-between group">
+                        <a href="{{ route('admin.vehicles') }}" class="w-full py-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-bold transition-all text-left px-6 flex items-center justify-between group">
                             Add New Vehicle
                             <i data-lucide="plus-circle" class="w-5 h-5 text-slate-500 group-hover:text-white transition-colors"></i>
-                        </button>
-                        <button class="w-full py-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-bold transition-all text-left px-6 flex items-center justify-between group">
+                        </a>
+                        <a href="{{ route('admin.bookings', ['status' => 'Pending']) }}" class="w-full py-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-bold transition-all text-left px-6 flex items-center justify-between group">
                             Review Pending Bookings
                             <i data-lucide="arrow-right-circle" class="w-5 h-5 text-slate-500 group-hover:text-white transition-colors"></i>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

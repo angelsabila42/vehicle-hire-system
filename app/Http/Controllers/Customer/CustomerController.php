@@ -10,7 +10,7 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $vehicles = Vehicle::where('status', 'available')->get();
+        $vehicles = Vehicle::where('status', 'Available')->latest()->get();
         return view('customer.index', compact('vehicles'));
     }
 }
