@@ -76,7 +76,12 @@
                             </div>
                         </td>
                         <td class="px-8 py-6">
-                            <span class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 text-[11px] font-extrabold tracking-tight">
+                            <span class="px-3 py-1.5 rounded-lg text-[11px] font-extrabold tracking-tight
+                                {{ $booking->status === 'Confirmed'  ? 'bg-green-50 text-green-600' :
+                                   ($booking->status === 'Pending'   ? 'bg-amber-50 text-amber-600' :
+                                   ($booking->status === 'Completed' ? 'bg-gray-100 text-gray-500' :
+                                   ($booking->status === 'Rejected'  ? 'bg-red-50 text-red-600' :
+                                   ($booking->status === 'Cancelled' ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-500')))) }}">
                                 {{ $booking->status }}
                             </span>
                         </td>
