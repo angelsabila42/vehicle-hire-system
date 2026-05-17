@@ -45,6 +45,11 @@
                                 </select>
                             </div>
                         </div>
+                        @error('dates')
+                            <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-2xl flex items-center text-red-600 text-sm font-semibold">
+                                <i data-lucide="alert-circle" class="w-4 h-4 mr-2 shrink-0"></i> {{ $message }}
+                            </div>
+                        @enderror
                     </section>
 
                     <section class="pt-12 border-t border-gray-100">

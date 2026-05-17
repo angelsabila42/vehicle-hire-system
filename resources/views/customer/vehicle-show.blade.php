@@ -118,18 +118,28 @@
                     </div>
                 </div>
 
+                @if($vehicle->is_available)
                 <a href="{{ route('customer.booking.create', $vehicle->VehicleId) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
                     Book Now
                 </a>
-
                 <p class="text-center text-gray-400 text-sm">No payment required until pickup</p>
-
                 <div class="mt-8 pt-8 border-t border-gray-100">
                     <div class="bg-green-50 text-green-700 p-4 rounded-2xl flex items-center justify-center space-x-2">
                         <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                         <span class="font-bold">Available for immediate booking</span>
                     </div>
                 </div>
+                @else
+                <div class="w-full bg-gray-100 text-gray-400 py-5 rounded-2xl font-bold text-xl text-center mb-4 cursor-not-allowed">
+                    Book Now
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="bg-red-50 text-red-600 p-4 rounded-2xl flex items-center justify-center space-x-2 border border-red-100">
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span class="font-bold">Not Available</span>
+                    </div>
+                </div>
+                @endif
             </div>
 
         </div>
