@@ -28,6 +28,7 @@ class Vehicle extends Model
         'insurance',
         'image_path',
         'sub_images',
+
     ];
 
     protected $appends = [

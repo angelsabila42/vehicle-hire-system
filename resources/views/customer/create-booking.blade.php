@@ -54,11 +54,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-bold text-slate-900 mb-3">Full Name</label>
-                                <input type="text" name="full_name" value="{{ Auth::user()->name }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition" readonly>
+                                <input type="text" name="full_name" value="{{ Auth::user()->name }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-slate-900 mb-3">Email Address</label>
-                                <input type="email" name="email" value="{{ Auth::user()->email }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition" readonly>
+                                <input type="email" name="email" value="{{ Auth::user()->email }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-slate-900 mb-3">Phone Number</label>
