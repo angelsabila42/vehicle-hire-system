@@ -9,11 +9,11 @@
 
         <div class="space-y-4 mb-8">
             <div class="w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-sm">
-                <img src="{{ asset('images/rav4-main.jpg') }}" class="w-full h-full object-cover" alt="Toyota Rav4 Main">
+                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="{{ $vehicle->name }}">
             </div>
             <div class="grid grid-cols-2 gap-4 h-64">
-                <img src="{{ asset('images/rav4-interior.jpg') }}" class="w-full h-full object-cover rounded-[2rem]" alt="Interior">
-                <img src="{{ asset('images/rav4-rear.jpg') }}" class="w-full h-full object-cover rounded-[2rem]" alt="Rear view">
+                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
+                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
             </div>
         </div>
 

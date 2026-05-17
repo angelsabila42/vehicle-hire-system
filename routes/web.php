@@ -18,6 +18,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bookings/{id}', [BookingController::class, 'showBooking'])->name('customer.booking.show');
     Route::get('/bookings/history/{id}', [BookingController::class, 'showBookingHistory'])->name('customer.booking.history.show');
     Route::get('/bookings/create/{id}', [BookingController::class, 'showBookingForm'])->name('customer.booking.create');
+    Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+    Route::patch('/bookings/{id}/cancel', [BookingController::class, 'cancelBooking'])->name('customer.booking.cancel');
 
     Route::get('/vehicles/details/{id}', [VehicleController::class, 'showDetails'])->name('customer.vehicles.show.details');
     Route::get('/vehicles', [VehicleController::class, 'index'])->name('customer.vehicles.index');

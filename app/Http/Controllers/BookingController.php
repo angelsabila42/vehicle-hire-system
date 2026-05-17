@@ -96,11 +96,14 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'vehicle_id'     => 'required|exists:vehicles,VehicleId',
-            'pickup_location_id' => 'required|exists:pickup_locations,id',
-            'payment'        => 'nullable|string|max:255',
-            'startDate'      => 'required|date|after_or_equal:today',
-            'endDate'        => 'required|date|after_or_equal:startDate',
+            'vehicle_id'         => 'required|exists:vehicles,VehicleId',
+            'pickup_location_id' => 'nullable|exists:pickup_locations,id',
+            'payment'            => 'nullable|string|max:255',
+            'startDate'          => 'required|date|after_or_equal:today',
+            'endDate'            => 'required|date|after_or_equal:startDate',
+            'phone'              => 'nullable|string|max:20',
+            'nin'                => 'nullable|string|max:20',
+            'driving_license'    => 'nullable|string|max:20',
         ]);
 
         // Double booking validation
@@ -148,6 +151,23 @@ class BookingController extends Controller
         $booking = Booking::with(['vehicle'])->findOrFail($id);
 
         return view('customer.show-history', compact('booking'));
+    }
+
+    public function cancelBooking(string $id)
+    {
+        $booking = Booking::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+        if (!in_array($booking->status, ['Pending', 'Confirmed'])) {
+            return redirect()->back()->withErrors(['cancel' => 'This booking cannot be cancelled.']);
+        }
+
+        $booking->status = 'Cancelled';
+        $booking->save();
+
+        $admins = User::where('role', 'admin')->get();
+        Notification::send($admins, new BookingCancelled($booking));
+
+        return redirect()->route('customer.bookings')->with('success', 'Booking cancelled successfully.');
     }
 
     public function approveBooking(string $id)
