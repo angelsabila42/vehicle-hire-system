@@ -23,7 +23,7 @@ class NotificationController extends Controller
 
         $bookingId = $notification->data['booking_id'] ?? null;
         if ($bookingId) {
-            return redirect()->route('customer.booking.show', $bookingId);
+            return redirect()->route('customer.booking.history.show', $bookingId);
         }
 
         return back();
@@ -53,6 +53,23 @@ class NotificationController extends Controller
         }
 
         $user->notifications()->delete();
+
+        return back();
+    }
+
+    public function destroy(string $id){
+        /** @var \App\Models\User|null $user */
+        $user = auth()->guard('web')->user();
+
+        if (!$user) {
+            return back();
+        }
+
+        $notification = $user
+            ->notifications()
+            ->findOrFail($id);
+
+        $notification->delete();
 
         return back();
     }

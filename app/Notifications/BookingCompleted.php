@@ -8,10 +8,10 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Booking; 
 
-class BookingPending extends Notification
+class BookingCompleted extends Notification
 {
     use Queueable;
-        protected Booking $booking;
+     protected Booking $booking;
 
     /**
      * Create a new notification instance.
@@ -28,11 +28,11 @@ class BookingPending extends Notification
      */
     public function via(object $notifiable): array
     {
-        if (!$notifiable->notify_booking_pending) {
+        if (!$notifiable->notify_new_bookings) {
             return [];
         }
 
-        // Send to the database
+        //Send it to the database (no mail).
         return ['database'];
     }
 
@@ -62,12 +62,12 @@ class BookingPending extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title' => 'Booking Pending',
-            'message' => 'Booking ' . $this->booking->id . ' is pending',
-            'icon' => 'alarm-clock',
-            'type' => 'booking_pending',
-            'bg_color' => 'bg-yellow-100',
-            'icon_color' => 'text-yellow-600',
+            'title' => 'Booking Confirmed',
+            'message' => 'Your booking has been confirmed',
+            'icon' => 'circle-check-big',
+            'type' => 'booking_confirmed',
+            'bg_color' => 'bg-green-100',
+            'icon_color' => 'text-green-600',
             'booking_id' => $this->booking->id,
         ];
     }

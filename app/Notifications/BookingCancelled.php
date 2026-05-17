@@ -29,11 +29,11 @@ class BookingCancelled extends Notification
     public function via(object $notifiable)
     {
 
-        if (!$notifiable->notify_bookings_cancelled) {
+        if (!$notifiable->notify_booking_cancelled) {
             return [];
         }
 
-        //Send to the database
+        // Send to the database
         return ['database'];
     }
 

@@ -44,7 +44,7 @@
                                         </div>
                                         <div>
                                             <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Pickup Location</p>
-                                            <p class="text-sm font-semibold text-slate-700">{{ $booking->pickUpLocation }}</p>
+                                            <p class="text-sm font-semibold text-slate-700">{{ $booking->pickupLocation->address ?? 'N/A' }}</p>
                                         </div>
                                     </div>
 

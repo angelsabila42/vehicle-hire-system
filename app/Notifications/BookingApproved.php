@@ -6,12 +6,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Booking; 
+use App\Models\Booking;
 
-class BookingConfirmed extends Notification
+class BookingApproved extends Notification
 {
     use Queueable;
-     protected Booking $booking;
+    protected Booking $booking;
 
     /**
      * Create a new notification instance.
@@ -28,11 +28,11 @@ class BookingConfirmed extends Notification
      */
     public function via(object $notifiable): array
     {
-        if (!$notifiable->notify_new_bookings) {
+        if (!$notifiable->notify_booking_approved) {
             return [];
         }
 
-        //Send it to the database (no mail).
+        // Send to the database
         return ['database'];
     }
 
@@ -62,10 +62,10 @@ class BookingConfirmed extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title' => 'Booking Confirmed',
-            'message' => 'Your booking has been confirmed',
-            'icon' => 'circle-check-big',
-            'type' => 'booking_confirmed',
+            'title' => 'Booking Approved',
+            'message' => 'Your booking has been approved. You will be contacted for more information',
+            'icon' => 'check',
+            'type' => 'booking_approved',
             'bg_color' => 'bg-green-100',
             'icon_color' => 'text-green-600',
             'booking_id' => $this->booking->id,

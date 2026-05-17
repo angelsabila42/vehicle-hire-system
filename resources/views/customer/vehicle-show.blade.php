@@ -10,9 +10,9 @@
         <div class="flex flex-col gap-6 mb-8">
             <div class="w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-sm bg-slate-100">
                 @if($vehicle->image_url)
-                <img src="{{ asset($vehicle->image_url) }}" class="w-full h-full object-cover" alt="{{ $vehicle->make }} {{ $vehicle->model }}">
+                <img src="{{ asset($vehicle->image_url) ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="{{ $vehicle->make }} {{ $vehicle->model }}">
                 @else
-                <img src="{{ asset('images/rav4-main.jpg') }}" class="w-full h-full object-cover" alt="Default Vehicle Placeholder">
+                <img src="{{ asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="Default Vehicle Placeholder">
                 @endif
             </div>
 

@@ -9,8 +9,10 @@ use App\Models\PickupLocation;
 use App\Notifications\BookingPending;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Notifications\BookingApproved;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\BookingCancelled;
+use App\Notifications\BookingCompleted;
 use App\Notifications\BookingConfirmed;
 use App\Notifications\BookingRejected;
 
@@ -96,11 +98,14 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'vehicle_id'     => 'required|exists:vehicles,VehicleId',
-            'pickup_location_id' => 'required|exists:pickup_locations,id',
-            'payment'        => 'nullable|string|max:255',
-            'startDate'      => 'required|date|after_or_equal:today',
-            'endDate'        => 'required|date|after_or_equal:startDate',
+            'vehicle_id'         => 'required|exists:vehicles,VehicleId',
+            'pickup_location_id' => 'nullable|exists:pickup_locations,id',
+            'payment'            => 'nullable|string|max:255',
+            'startDate'          => 'required|date|after_or_equal:today',
+            'endDate'            => 'required|date|after_or_equal:startDate',
+            'phone'              => 'nullable|string|max:20',
+            'nin'                => 'nullable|string|max:20',
+            'driving_license'    => 'nullable|string|max:20',
         ]);
 
         // Double booking validation
@@ -150,13 +155,30 @@ class BookingController extends Controller
         return view('customer.show-history', compact('booking'));
     }
 
+    public function cancelBooking(string $id)
+    {
+        $booking = Booking::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+        if (!in_array($booking->status, ['Pending', 'Confirmed'])) {
+            return redirect()->back()->withErrors(['cancel' => 'This booking cannot be cancelled.']);
+        }
+
+        $booking->status = 'Cancelled';
+        $booking->save();
+
+        $admins = User::where('role', 'admin')->get();
+        Notification::send($admins, new BookingCancelled($booking));
+
+        return redirect()->route('customer.bookings')->with('success', 'Booking cancelled successfully.');
+    }
+
     public function approveBooking(string $id)
     {
         $booking = Booking::findOrFail($id);
         $booking->status = 'Confirmed';
         $booking->save();
 
-        $booking->user->notify(new BookingConfirmed($booking));
+        $booking->user->notify(new BookingApproved($booking));
 
         return redirect()->back()
             ->with('success', 'Booking approved successfully');
@@ -180,6 +202,9 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($id);
         $booking->status = 'Completed';
         $booking->save();
+
+        $booking->user->notify(new BookingCompleted($booking));
+        
         return redirect()->back()
             ->with('success', 'Booking completed');
     }
