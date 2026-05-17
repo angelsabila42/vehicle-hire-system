@@ -23,7 +23,7 @@ class NotificationController extends Controller
 
         $bookingId = $notification->data['booking_id'] ?? null;
         if ($bookingId) {
-            return redirect()->route('customer.booking.history.show', $bookingId);
+            return redirect()->route('customer.booking.show', $bookingId);
         }
 
         return back();
