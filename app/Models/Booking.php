@@ -14,7 +14,8 @@ class Booking extends Model
         'payment',
         'startDate',
         'endDate',
-        'reminder_sent'
+        'reminder_sent',
+        'phone'
     ];
 
     protected $casts = [

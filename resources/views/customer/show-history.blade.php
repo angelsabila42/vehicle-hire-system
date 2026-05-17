@@ -89,6 +89,7 @@
                     <div class="grid grid-cols-1 gap-y-4">
                         <div class="flex items-center"><i data-lucide="user" class="w-4 h-4 text-gray-400 mr-4"></i> <span class="text-gray-500 w-32">Full Name:</span> <span class="font-semibold">{{ $booking->user->name }}</span></div>
                         <div class="flex items-center"><i data-lucide="mail" class="w-4 h-4 text-gray-400 mr-4"></i> <span class="text-gray-500 w-32">Email:</span> <span class="font-semibold">{{ $booking->user->email }}</span></div>
+                        <div class="flex items-center"><i data-lucide="phone" class="w-4 h-4 text-gray-400 mr-4"></i> <span class="text-gray-500 w-32">Phone:</span> <span class="font-semibold">{{ $booking->phone ?? 'N/A' }}</span></div>
                     </div>
                 </section>
 
