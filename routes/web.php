@@ -11,7 +11,7 @@ use App\Http\Controllers\NotificationController;
 
 
 // Customer Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','customer'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
 
     Route::get('/bookings', [BookingController::class, 'customerIndex'])->name('customer.bookings');
@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 //Admin Routes
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/bookings', [BookingController::class, 'adminIndex'])->name('admin.bookings');
     Route::get('/vehicles', [VehicleController::class, 'adminVehicleIndex'])->name('admin.vehicles');
