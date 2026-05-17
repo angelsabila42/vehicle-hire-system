@@ -78,7 +78,7 @@
                         <div class="flex items-center space-x-5">
                             <img src="{{ asset('images/rav4.jpg') }}" class="w-28 h-20 object-cover rounded-[1.5rem]" alt="Toyota Rav4">
                             <div>
-                                <h4 class="font-bold text-lg text-slate-900">{{ $vehicle->name }}</h4>
+                                <h4 class="font-bold text-lg text-slate-900">{{ $vehicle->make }} {{ $vehicle->model }}</h4>
                                 <p class="text-sm text-gray-400 font-medium">{{ $vehicle->category }} • {{ $vehicle->transmission }}</p>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                     <div class="p-10 space-y-6">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Daily Rate</span>
-                            <span class="font-bold text-slate-900 text-lg">UGX {{ number_format($vehicle->price) }}</span>
+                            <span class="font-bold text-slate-900 text-lg">UGX {{ number_format($vehicle->price_per_day) }}</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Rental Period</span>

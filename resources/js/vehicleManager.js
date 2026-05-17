@@ -37,12 +37,19 @@ export default (initialStatuses = []) => ({
         });
     },
 
+    vehicleId() {
+        return this.currentVehicle?.id ?? this.currentVehicle?.VehicleId ?? null;
+    },
+
     openEditModal(vehicle) {
         // Create a shallow copy to prevent direct mutation of the original object
-        this.currentVehicle = { ...vehicle };
+        this.currentVehicle = {
+            ...vehicle,
+            id: vehicle.id ?? vehicle.VehicleId ?? null,
+        };
         
         // Handle Image Preview
-        this.imagePreview = vehicle.image ? '/storage/' + vehicle.image : null;
+        this.imagePreview = vehicle.image_url || null;
         this.galleryPreviews = [];
 
         // Handle Features array

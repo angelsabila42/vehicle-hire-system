@@ -20,7 +20,7 @@
         <div class="bg-white rounded-[1.0rem] p-8 border border-gray-50">
             <div class="flex justify-between items-start mb-6">
                 <div>
-                    <h1 class="text-3xl text-slate-900 mb-1">{{$vehicle->name}}</h1>
+                    <h1 class="text-3xl text-slate-900 mb-1">{{ $vehicle->make }} {{ $vehicle->model }}</h1>
                     <p class="text-gray-400 font-medium">{{$vehicle->category}} • {{$vehicle->year}}</p>
                 </div>
                 <div class="flex items-center text-amber-400">
@@ -93,7 +93,7 @@
         <div class="lg:col-span-1">
             <div class="bg-white p-8 rounded-[1.0rem] border border-gray-100 shadow-xl sticky top-24">
                 <p class="text-gray-400 font-semibold text-sm tracking-tighter">Price per day</p>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-8">UGX {{ number_format($vehicle->price) }}</h2>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-8">UGX {{ number_format($vehicle->price_per_day) }}</h2>
 
                 <div class="space-y-4 mb-8">
                     <div class="flex items-center text-gray-500">

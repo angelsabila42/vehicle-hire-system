@@ -11,10 +11,22 @@
         </div>
 
         <div class="bg-white p-2 rounded-[1.5rem] border border-gray-100 shadow-sm inline-flex items-center gap-2">
-            <button class="px-8 py-3 bg-slate-900 text-white rounded-[1.5rem] font-bold text-sm">All</button>
-            <button class="px-8 py-3 text-gray-400 hover:bg-gray-50 rounded-[1.5rem] font-bold text-sm transition-colors">Available</button>
-            <button class="px-8 py-3 text-gray-400 hover:bg-gray-50 rounded-[1.5rem] font-bold text-sm transition-colors">Rented</button>
-            <button class="px-8 py-3 text-gray-400 hover:bg-gray-50 rounded-[1.5rem] font-bold text-sm transition-colors">Maintenance</button>
+            <a href="{{ route('admin.vehicles') }}"
+               class="px-8 py-3 rounded-[1.5rem] font-bold text-sm transition-colors {{ ! $status ? 'bg-slate-900 text-white' : 'text-gray-400 hover:bg-gray-50' }}">
+                All
+            </a>
+            <a href="{{ route('admin.vehicles', ['status' => 'Available']) }}"
+               class="px-8 py-3 rounded-[1.5rem] font-bold text-sm transition-colors {{ $status === 'Available' ? 'bg-slate-900 text-white' : 'text-gray-400 hover:bg-gray-50' }}">
+                Available
+            </a>
+            <a href="{{ route('admin.vehicles', ['status' => 'Rented']) }}"
+               class="px-8 py-3 rounded-[1.5rem] font-bold text-sm transition-colors {{ $status === 'Rented' ? 'bg-slate-900 text-white' : 'text-gray-400 hover:bg-gray-50' }}">
+                Rented
+            </a>
+            <a href="{{ route('admin.vehicles', ['status' => 'Maintenance']) }}"
+               class="px-8 py-3 rounded-[1.5rem] font-bold text-sm transition-colors {{ $status === 'Maintenance' ? 'bg-slate-900 text-white' : 'text-gray-400 hover:bg-gray-50' }}">
+                Maintenance
+            </a>
         </div>
 
         <div class="space-y-6 pb-12">
@@ -22,12 +34,12 @@
             <div class="group bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm flex items-center gap-8 hover:shadow-xl hover:shadow-slate-100/50 transition-all duration-500">
 
                 <div class="w-56 h-36 rounded-3xl overflow-hidden shrink-0 shadow-inner bg-gray-50">
-                    <img src="{{ asset('storage/' . $vehicle->image) }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="{{ $vehicle->name }}">
+                    <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="{{ $vehicle->make }} {{ $vehicle->model }}">
                 </div>
 
                 <div class="flex-grow space-y-1">
                     <div class="flex items-center gap-3">
-                        <h3 class="text-xl text-slate-900">{{ $vehicle->name }}</h3>
+                        <h3 class="text-xl text-slate-900">{{ $vehicle->make }} {{ $vehicle->model }}</h3>
                         <div class="flex items-center text-amber-400 text-sm font-bold">
                             <i data-lucide="star" class="w-4 h-4 fill-current mr-1"></i> {{ $vehicle->rating ?? '4.5' }}
                         </div>
@@ -36,7 +48,7 @@
                     <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">{{ $vehicle->type }} • {{ $vehicle->year }}</p>
 
                     <div class="flex flex-col gap-2 pt-3">
-                        <span class="text-gray-400 font-bold text-xs uppercase">{{ $vehicle->plate_number ?? 'UAJ 321D' }}</span>
+                        <span class="text-gray-400 font-bold text-xs uppercase">{{ $vehicle->number_plate }}</span>
 
                         @php
                         $statusValue = is_array($vehicle->status) ? ($vehicle->status[0] ?? 'Unknown') : $vehicle->status;
@@ -46,6 +58,8 @@
                         'Maintenance' => 'bg-amber-50 text-amber-600',
                         'Under Maintenance' => 'bg-amber-50 text-amber-600',
                         'Rented' => 'bg-blue-50 text-blue-600',
+                        'Booked' => 'bg-blue-50 text-blue-600',
+                        'On Rent' => 'bg-blue-50 text-blue-600',
                         'Unavailable' => 'bg-red-50 text-red-600',
                         ];
 
@@ -63,16 +77,21 @@
                 <div class="flex flex-col justify-between items-end h-36 py-2">
                     <div class="text-right">
                         <p class="text-gray-400 text-xs mb-1">Daily Rate</p>
-                        <p class="text-xl font-extrabold text-slate-900">UGX {{ number_format($vehicle->price) }}</p>
+                        <p class="text-xl font-extrabold text-slate-900">UGX {{ number_format($vehicle->price_per_day) }}</p>
                     </div>
 
                     <div class="flex gap-3">
                         <button @click="openEditModal({{ json_encode($vehicle) }})" class="p-2.5 text-slate-400 hover:bg-gray-50 hover:text-slate-400 rounded-xl transition-all shadow-sm">
                             <i data-lucide="edit-3" class="w-5 h-5"></i>
                         </button>
-                        <button class="p-2.5 text-red-400 hover:bg-red-50 hover:text-red-400 rounded-xl transition-all shadow-sm">
-                            <i data-lucide="trash-2" class="w-5 h-5"></i>
-                        </button>
+                        <form action="{{ route('admin.vehicles.destroy', $vehicle->id) }}" method="POST"
+                              onsubmit="return confirm('Delete this vehicle? This cannot be undone.')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="p-2.5 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all shadow-sm">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

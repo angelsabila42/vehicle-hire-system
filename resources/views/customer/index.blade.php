@@ -77,7 +77,7 @@
                     @foreach ($vehicles->take(4) as $vehicle)
                         <a href="{{ route('customer.vehicles.show.details', $vehicle->VehicleId) }}" class="group block bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
                             <div class="relative h-64 overflow-hidden">
-                                <img src="{{ asset('images/' . $vehicle->image) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $vehicle->name }}">
+                                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $vehicle->make }} {{ $vehicle->model }}">
                                 <div class="absolute bottom-4 right-4">
                                     <span class="px-4 py-1.5 bg-white/90 backdrop-blur-md text-green-600 text-xs font-bold rounded-full shadow-sm">
                                         {{ $vehicle->is_available ? 'Available' : 'Not Available' }}
@@ -87,7 +87,7 @@
                             <div class="p-6">
                                 <div class="flex justify-between items-start mb-2">
                                     <div>
-                                        <h3 class="text-xl font-bold text-slate-900">{{ $vehicle->name }}</h3>
+                                        <h3 class="text-xl font-bold text-slate-900">{{ $vehicle->make }} {{ $vehicle->model }}</h3>
                                         <p class="text-gray-400 text-sm">{{ $vehicle->category }}</p>
                                     </div>
                                     <div class="flex items-center text-amber-400">
@@ -98,7 +98,7 @@
                                 <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-50">
                                     <div>
                                         <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Per day</p>
-                                        <p class="text-lg font-bold text-slate-900">UGX {{ number_format($vehicle->price) }}</p>
+                                        <p class="text-lg font-bold text-slate-900">UGX {{ number_format($vehicle->price_per_day) }}</p>
                                     </div>
                                     <div class="p-3 bg-slate-900 text-white rounded-2xl group-hover:bg-violet-600 transition-colors">
                                         <i data-lucide="arrow-up-right" class="w-5 h-5"></i>

@@ -31,6 +31,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
     
     Route::post('/vehicles/store', [VehicleController::class, 'store'])->name('admin.vehicles.store');
+    Route::put('/vehicles/{id}', [VehicleController::class, 'update'])->name('admin.vehicles.update');
+    Route::delete('/vehicles/{id}', [VehicleController::class, 'destroy'])->name('admin.vehicles.destroy');
     Route::post('/bookings/{id}/approve', [BookingController::class, 'approveBooking'])->name('admin.bookings.approve');
     Route::post('/bookings/{id}/reject', [BookingController::class, 'rejectBooking'])->name('admin.bookings.reject');
     Route::post('/bookings/{id}/complete', [BookingController::class, 'completeBooking'])->name('admin.bookings.complete');

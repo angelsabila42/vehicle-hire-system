@@ -23,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'location',
         'notify_new_bookings',
         'notify_booking_cancelled',
         'notify_booking_confirmed',

@@ -6,6 +6,9 @@
                 <p class="text-gray-500 mt-1 font-medium">Review and manage customer bookings</p>
             </div>
             <form method="GET" action="{{ route('admin.bookings') }}">
+            @if($status)
+                <input type="hidden" name="status" value="{{ $status }}">
+            @endif
             <div class="relative group">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <i data-lucide="search" class="w-5 h-5 text-gray-400 group-focus-within:text-slate-900 transition-colors"></i>
@@ -60,42 +63,55 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    @foreach($bookings as $booking)
+                    @forelse($bookings as $booking)
                     <tr class="hover:bg-gray-50/50 transition-colors group">
                         <td class="px-8 py-6 font-bold text-slate-900">#{{ $booking->id }}</td>
                         <td class="px-8 py-6">
-                            <div class="text-sm font-extrabold text-slate-900">{{ $booking->user->name }}</div>
-                            <div class="text-xs text-gray-400 font-medium">{{ $booking->user->email }}</div>
+                            <div class="text-sm font-extrabold text-slate-900">{{ $booking->user?->name ?? 'Unknown customer' }}</div>
+                            <div class="text-xs text-gray-400 font-medium">{{ $booking->user?->email ?? '—' }}</div>
                         </td>
                         <td class="px-8 py-6">
-                            <div class="text-sm font-bold text-slate-700">{{ $booking->vehicle->name }}</div>
-                            <div class="text-[10px] text-gray-400 font-bold uppercase mt-0.5">{{ $booking->pickup_date }}</div>
+                            <div class="text-sm font-bold text-slate-700">{{ $booking->vehicle ? trim($booking->vehicle->make . ' ' . $booking->vehicle->model) : 'Unknown vehicle' }}</div>
+                            <div class="text-[10px] text-gray-400 font-bold uppercase mt-0.5">
+                                {{ $booking->startDate ? \Carbon\Carbon::parse($booking->startDate)->format('M j, Y') : '—' }}
+                                –
+                                {{ $booking->endDate ? \Carbon\Carbon::parse($booking->endDate)->format('M j, Y') : '—' }}
+                            </div>
                         </td>
                         <td class="px-8 py-6">
                             <span class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 text-[11px] font-extrabold tracking-tight">
                                 {{ $booking->status }}
                             </span>
                         </td>
+                        @php
+                            $start = $booking->startDate ? \Carbon\Carbon::parse($booking->startDate) : null;
+                            $end = $booking->endDate ? \Carbon\Carbon::parse($booking->endDate) : null;
+                            $days = ($start && $end) ? max($start->diffInDays($end) + 1, 1) : 1;
+                            $amount = $booking->vehicle ? $days * $booking->vehicle->price_per_day : 0;
+                            $vehicleLabel = $booking->vehicle
+                                ? trim($booking->vehicle->make . ' ' . $booking->vehicle->model)
+                                : 'Unknown vehicle';
+                        @endphp
                         <td class="px-8 py-6 text-sm font-extrabold text-slate-900">
-                            <span class="text-[10px] text-gray-400 mr-1 uppercase">UGX</span>600,000
+                            <span class="text-[10px] text-gray-400 mr-1 uppercase">UGX</span>{{ number_format($amount) }}
                         </td>
                         <td class="px-8 py-6">
                             <div class="flex items-center justify-center gap-3">
-                                <!--Change this once you have mock data or have connected the database-->
-                                <button @click="openBookingDrawer({
-                                    id: {{ $booking->id }}, 
-                                    customer_name: '{{ $booking->user->name }}', 
-                                    customer_email: '{{ $booking->user->email }}',
-                                    vehicle_name: '{{ $booking->vehicle->name }}',
-                                    pickup_date: '{{ $booking->pickup_date }}',
-                                    location: '{{ $booking->location }}',
-                                    status: '{{ $booking->status }}',
-                                    amount: '{{ $booking->payment }}'
-                                    })" class="p-2 text-gray-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
+                                <button @click="openBookingDrawer(@js([
+                                    'id' => $booking->id,
+                                    'customer_name' => $booking->user?->name ?? 'Unknown customer',
+                                    'customer_email' => $booking->user?->email ?? '',
+                                    'vehicle_name' => $vehicleLabel,
+                                    'pickup_date' => $start?->format('M j, Y') ?? '',
+                                    'location' => $booking->pickupLocation?->address ?? '',
+                                    'status' => $booking->status,
+                                    'amount' => number_format($amount),
+                                ]))" class="p-2 text-gray-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>
+                                @if($booking->status === 'Pending')
                                 <form action="{{ route('admin.bookings.approve', $booking->id) }}" method="POST">
-                                @csrf
+                                    @csrf
                                     <button type="submit"
                                         class="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all">
                                         <i data-lucide="check-circle" class="w-4 h-4"></i>
@@ -107,10 +123,17 @@
                                         <i data-lucide="x-circle" class="w-4 h-4"></i>
                                     </button>
                                 </form>
+                                @endif
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="6" class="px-8 py-16 text-center text-gray-400 font-medium">
+                            No bookings found{{ $status ? ' with status ' . $status : '' }}.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
