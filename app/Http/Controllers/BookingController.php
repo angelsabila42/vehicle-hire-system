@@ -9,8 +9,10 @@ use App\Models\PickupLocation;
 use App\Notifications\BookingPending;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Notifications\BookingApproved;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\BookingCancelled;
+use App\Notifications\BookingCompleted;
 use App\Notifications\BookingConfirmed;
 use App\Notifications\BookingRejected;
 
@@ -101,7 +103,7 @@ class BookingController extends Controller
             'payment'            => 'nullable|string|max:255',
             'startDate'          => 'required|date|after_or_equal:today',
             'endDate'            => 'required|date|after_or_equal:startDate',
-            'phone'              => 'nullable|string|max:20',
+            'phone'              => 'required|string|max:20',
             'nin'                => 'nullable|string|max:20',
             'driving_license'    => 'nullable|string|max:20',
         ]);
@@ -127,6 +129,7 @@ class BookingController extends Controller
 
         $data['user_id'] = Auth::id();
         $data['status'] = 'Pending';
+        $data['phone'] = '+256' . $data['phone'];
 
         $booking = Booking::create($data);
 
@@ -176,7 +179,7 @@ class BookingController extends Controller
         $booking->status = 'Confirmed';
         $booking->save();
 
-        $booking->user->notify(new BookingConfirmed($booking));
+        $booking->user->notify(new BookingApproved($booking));
 
         return redirect()->back()
             ->with('success', 'Booking approved successfully');
@@ -200,6 +203,9 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($id);
         $booking->status = 'Completed';
         $booking->save();
+
+        $booking->user->notify(new BookingCompleted($booking));
+        
         return redirect()->back()
             ->with('success', 'Booking completed');
     }

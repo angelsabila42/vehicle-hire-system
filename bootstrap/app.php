@@ -1,5 +1,5 @@
 <?php
-
+//die('in the middleware file');
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CustomerMiddleware;

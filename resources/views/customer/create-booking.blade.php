@@ -45,6 +45,11 @@
                                 </select>
                             </div>
                         </div>
+                        @error('dates')
+                            <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-2xl flex items-center text-red-600 text-sm font-semibold">
+                                <i data-lucide="alert-circle" class="w-4 h-4 mr-2 shrink-0"></i> {{ $message }}
+                            </div>
+                        @enderror
                     </section>
 
                     <section class="pt-12 border-t border-gray-100">
@@ -54,11 +59,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-bold text-slate-900 mb-3">Full Name</label>
-                                <input type="text" name="full_name" value="{{ Auth::user()->name }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition" readonly>
+                                <input type="text" name="full_name" value="{{ Auth::user()->name }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-slate-900 mb-3">Email Address</label>
-                                <input type="email" name="email" value="{{ Auth::user()->email }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition" readonly>
+                                <input type="email" name="email" value="{{ Auth::user()->email }}" class="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-2 focus:ring-slate-900 transition">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-slate-900 mb-3">Phone Number</label>

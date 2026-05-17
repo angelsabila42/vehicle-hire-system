@@ -21,7 +21,7 @@
         <div>
     <a href="">
         <img 
-            src="{{ asset('images/hire-logo2.png') }}" 
+            src="{{ asset('images/Favicon.png') }}" 
             alt="Logo"
             class="w-20 h-20"
         >

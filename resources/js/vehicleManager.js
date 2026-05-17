@@ -32,7 +32,7 @@ export default (initialStatuses = []) => ({
         this.addModalOpen = true;
 
         //Refresh icons for the new modal DOM
-        this.$nextTick(() => { 
+        this.$nextTick(() => {
             if (window.lucide) window.lucide.createIcons();
         });
     },
@@ -47,26 +47,37 @@ export default (initialStatuses = []) => ({
             ...vehicle,
             id: vehicle.id ?? vehicle.VehicleId ?? null,
         };
-        
+
         // Handle Image Preview
         this.imagePreview = vehicle.image_url || null;
         this.galleryPreviews = [];
 
-        // Handle Features array
+        //Features array
         if (typeof vehicle.features === 'string') {
             try {
                 this.currentVehicle.features = JSON.parse(vehicle.features);
-            } catch(e) {
+            } catch (e) {
                 this.currentVehicle.features = [];
             }
         } else {
             this.currentVehicle.features = Array.isArray(vehicle.features) ? [...vehicle.features] : [];
         }
 
+        //Sub Images Gallery Array
+        if (typeof vehicle.sub_images === 'string') {
+            try {
+                this.galleryPreviews = JSON.parse(vehicle.sub_images);
+            } catch (e) {
+                this.galleryPreviews = [];
+            }
+        } else {
+            this.galleryPreviews = Array.isArray(vehicle.sub_images) ? [...vehicle.sub_images] : [];
+        }
+
         this.editModalOpen = true;
 
         // Refresh icons
-        this.$nextTick(() => { 
+        this.$nextTick(() => {
             if (window.lucide) {
                 window.lucide.createIcons();
             }

@@ -1,52 +1,49 @@
 <x-app-layout>
-    <div class="py-6" x-data ="bookingManager">
+    <div class="py-6" x-data="bookingManager">
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
                 <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Booking Management</h1>
                 <p class="text-gray-500 mt-1 font-medium">Review and manage customer bookings</p>
             </div>
-            <form method="GET" action="{{ route('admin.bookings') }}">
-            @if($status)
-                <input type="hidden" name="status" value="{{ $status }}">
-            @endif
-            <div class="relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i data-lucide="search" class="w-5 h-5 text-gray-400 group-focus-within:text-slate-900 transition-colors"></i>
-                </div>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search bookings..." class="block w-full md:w-80 pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all shadow-sm">
-            </div>
-        </form>
+
         </div>
 
         <div class="flex items-center space-x-2 mb-8 bg-white p-2 rounded-2xl border border-gray-100 w-fit overflow-x-auto scrollbar-hide">
-            <a href="{{ route('admin.bookings') }}"
-               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+            <form method="GET" action="{{ route('admin.bookings') }}">
+                @if($status)
+                <input type="hidden" name="status" value="{{ $status }}">
+                @endif
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400 group-focus-within:text-slate-900 transition-colors"></i>
+                    </div>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search bookings..." class="block w-full md:w-80 pl-11 pr-4 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-medium focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all shadow-sm">
+                </div>
+            </form>
+            
+            <a href="{{ route('admin.bookings') }}" class="px-6 py-2 rounded-xl font-bold text-sm transition-all
                {{ !$status ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
-               All
+                All
             </a>
 
-            <a href="{{ route('admin.bookings', ['status' => 'Pending']) }}"
-               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+            <a href="{{ route('admin.bookings', ['status' => 'Pending']) }}" class="px-6 py-2 rounded-xl font-bold text-sm transition-all
                {{ $status == 'Pending' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
-               Pending
+                Pending
             </a>
 
-            <a href="{{ route('admin.bookings', ['status' => 'Confirmed']) }}"
-               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+            <a href="{{ route('admin.bookings', ['status' => 'Confirmed']) }}" class="px-6 py-2 rounded-xl font-bold text-sm transition-all
                {{ $status == 'Confirmed' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
-               Confirmed
+                Confirmed
             </a>
 
-            <a href="{{ route('admin.bookings', ['status' => 'Confirmed']) }}"
-               class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+            <a href="{{ route('admin.bookings', ['status' => 'Confirmed']) }}" class="px-6 py-2 rounded-xl font-bold text-sm transition-all
                {{ $status == 'Confirmed' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
-               Completed
+                Completed
             </a>
 
-            <a href="{{ route('admin.bookings', ['status' => 'Rejected']) }}"
-              class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+            <a href="{{ route('admin.bookings', ['status' => 'Rejected']) }}" class="px-6 py-2 rounded-xl font-bold text-sm transition-all
               {{ $status == 'Rejected' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
-              Cancelled
+                Cancelled
             </a>
         </div>
 
@@ -95,13 +92,13 @@
                             </span>
                         </td>
                         @php
-                            $start = $booking->startDate ? \Carbon\Carbon::parse($booking->startDate) : null;
-                            $end = $booking->endDate ? \Carbon\Carbon::parse($booking->endDate) : null;
-                            $days = ($start && $end) ? max($start->diffInDays($end) + 1, 1) : 1;
-                            $amount = $booking->vehicle ? $days * $booking->vehicle->price_per_day : 0;
-                            $vehicleLabel = $booking->vehicle
-                                ? trim($booking->vehicle->make . ' ' . $booking->vehicle->model)
-                                : 'Unknown vehicle';
+                        $start = $booking->startDate ? \Carbon\Carbon::parse($booking->startDate) : null;
+                        $end = $booking->endDate ? \Carbon\Carbon::parse($booking->endDate) : null;
+                        $days = ($start && $end) ? max($start->diffInDays($end) + 1, 1) : 1;
+                        $amount = $booking->vehicle ? $days * $booking->vehicle->price_per_day : 0;
+                        $vehicleLabel = $booking->vehicle
+                        ? trim($booking->vehicle->make . ' ' . $booking->vehicle->model)
+                        : 'Unknown vehicle';
                         @endphp
                         <td class="px-8 py-6 text-sm font-extrabold text-slate-900">
                             <span class="text-[10px] text-gray-400 mr-1 uppercase">UGX</span>{{ number_format($amount) }}
@@ -123,8 +120,7 @@
                                 @if($booking->status === 'Pending')
                                 <form action="{{ route('admin.bookings.approve', $booking->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit"
-                                        class="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all">
+                                    <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all">
                                         <i data-lucide="check-circle" class="w-4 h-4"></i>
                                     </button>
                                 </form>

@@ -30,7 +30,12 @@ class BookingRejected extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        if (!$notifiable->notify_booking_rejected) {
+            return [];
+        }
+
+        // Send to the database
+        return ['database'];
     }
 
     /**
@@ -39,7 +44,7 @@ class BookingRejected extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
+            ->line('Your request for a vehicle hire has been rejected. Please contact our support team for more information.    ')
             ->action('Notification Action', url('/'))
             ->line('Thank you for using our application!');
     }

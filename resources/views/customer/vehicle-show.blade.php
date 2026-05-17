@@ -7,14 +7,22 @@
             </a>
         </div>
 
-        <div class="space-y-4 mb-8">
-            <div class="w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-sm">
-                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="{{ $vehicle->name }}">
+        <div class="flex flex-col gap-6 mb-8">
+            <div class="w-full h-[500px] rounded-[2.5rem] overflow-hidden shadow-sm bg-slate-100">
+                @if($vehicle->image_url)
+                <img src="{{ asset($vehicle->image_url) ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="{{ $vehicle->make }} {{ $vehicle->model }}">
+                @else
+                <img src="{{ asset('images/hire-logo2.png') }}" class="w-full h-full object-cover" alt="Default Vehicle Placeholder">
+                @endif
             </div>
-            <div class="grid grid-cols-2 gap-4 h-64">
-                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
-                <img src="{{ $vehicle->image_url ?? asset('images/hire-logo2.png') }}" class="w-full h-full object-cover rounded-[2rem]" alt="{{ $vehicle->name }}">
+
+            @if(!empty($vehicle->sub_images) && count($vehicle->sub_images) > 0)
+            <div class="grid grid-cols-2 md:grid-cols-{{ min(count($vehicle->sub_images), 4) }} gap-4 h-64">
+                @foreach($vehicle->sub_images as $sub_image)
+                <img src="{{ asset('storage/' .$sub_image) }}" class="w-full h-full object-cover rounded-[2rem]" alt="Additional view">
+                @endforeach
             </div>
+            @endif
         </div>
 
         <div class="bg-white rounded-[1.0rem] p-8 border border-gray-50">
@@ -72,7 +80,7 @@
             <div class="mb-10">
                 <h3 class="text-xl text-slate-900 mb-4">About this vehicle</h3>
                 <p class="text-gray-500 leading-relaxed">
-                            {{ $vehicle->description }}
+                    {{ $vehicle->description }}
                 </p>
             </div>
 
@@ -110,18 +118,28 @@
                     </div>
                 </div>
 
+                @if($vehicle->is_available)
                 <a href="{{ route('customer.booking.create', $vehicle->VehicleId) }}" class="block w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl text-center hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 mb-4">
                     Book Now
                 </a>
-
                 <p class="text-center text-gray-400 text-sm">No payment required until pickup</p>
-
                 <div class="mt-8 pt-8 border-t border-gray-100">
                     <div class="bg-green-50 text-green-700 p-4 rounded-2xl flex items-center justify-center space-x-2">
                         <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                         <span class="font-bold">Available for immediate booking</span>
                     </div>
                 </div>
+                @else
+                <div class="w-full bg-gray-100 text-gray-400 py-5 rounded-2xl font-bold text-xl text-center mb-4 cursor-not-allowed">
+                    Book Now
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="bg-red-50 text-red-600 p-4 rounded-2xl flex items-center justify-center space-x-2 border border-red-100">
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span class="font-bold">Not Available</span>
+                    </div>
+                </div>
+                @endif
             </div>
 
         </div>

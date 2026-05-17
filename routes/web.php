@@ -11,7 +11,7 @@ use App\Http\Controllers\NotificationController;
 
 
 // Customer Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','customer'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
 
     Route::get('/bookings', [BookingController::class, 'customerIndex'])->name('customer.bookings');
@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 //Admin Routes
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/bookings', [BookingController::class, 'adminIndex'])->name('admin.bookings');
     Route::get('/vehicles', [VehicleController::class, 'adminVehicleIndex'])->name('admin.vehicles');
@@ -50,9 +50,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Notification Routes
-    Route::post('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+    Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::get('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::delete('/notifications/clear', [NotificationController::class, 'clearAll'])->name('notifications.clear');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.delete');
     Route::get('/welcome', function () {
     return view('welcome');
 });
