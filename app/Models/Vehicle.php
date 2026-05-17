@@ -27,6 +27,7 @@ class Vehicle extends Model
         'type',
         'insurance',
         'image_path',
+        'sub_images',
     ];
 
     protected $appends = [
@@ -37,6 +38,7 @@ class Vehicle extends Model
 
     protected $casts = [
         'features' => 'array',
+        'sub_images' => 'array'
     ];
 
     public function getIdAttribute(): mixed

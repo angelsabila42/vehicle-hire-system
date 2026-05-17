@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::table('vehicles', function (Blueprint $table) {
             $table->foreignId('user_id')->nullable()->after('price_per_day')->constrained('users')->onDelete('cascade');
-            $table->foreignId('manager_id')->nullable()->after('user_id')->constrained('managers')->onDelete('cascade');
+            $table->foreignId('manager_id')->nullable()->after('user_id')->constrained('managers', 'manager_id')->onDelete('cascade');
         });
     }
 
