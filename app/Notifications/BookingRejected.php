@@ -66,7 +66,7 @@ class BookingRejected extends Notification
         return [
             'title' => 'Booking Rejected',
             'message' => 'Your booking has been rejected. Please Contact the Help line for more information',
-            'icon' => 'times',
+            'icon' => 'x',
             'type' => 'booking_rejected',
             'bg_color' => 'bg-red-100',
             'icon_color' => 'text-red-600',

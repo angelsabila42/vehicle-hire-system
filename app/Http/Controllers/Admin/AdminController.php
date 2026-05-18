@@ -77,9 +77,9 @@ class AdminController extends Controller
         return back()->with('success', 'Settings updated successfully.');
     }
 
-    public function destroyLocation($id)
+    public function destroyLocation(string $id)
 {
-    $location = PickupLocation::findOrFail($id);
+    $location = PickupLocation::findOrFail( $id);
     
     $location->delete();
 

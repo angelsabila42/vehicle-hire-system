@@ -54,14 +54,20 @@
             </main>
 
             @if(!request()->is('admin*'))
-                    <x-footer/>
-                @endif
+            <x-footer />
+            @endif
         </div>
-    
+
     </div>
+    @if (session('success'))
+    <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="fixed bottom-5 right-5 z-50">
+        <x-toast />
+    </div>
+    @endif
 </body>
 
 <script>
     lucide.createIcons();
+
 </script>
 </html>
