@@ -9,7 +9,7 @@ class NotificationController extends Controller
     public function markAsRead(string $id)
     {
         /** @var \App\Models\User|null $user */
-        $user = auth()->guard('web')->user();
+        $user = auth('web')->user();
 
         if (!$user) {
             return back();
@@ -23,7 +23,11 @@ class NotificationController extends Controller
 
         $bookingId = $notification->data['booking_id'] ?? null;
         if ($bookingId) {
-            return redirect()->route('customer.booking.show', $bookingId);
+            
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.bookings');
+            }
+            return redirect()->route('customer.booking.history.show', $bookingId);
         }
 
         return back();
@@ -32,13 +36,13 @@ class NotificationController extends Controller
     public function markAllAsRead()
     {
         /** @var \App\Models\User|null $user */
-        $user = auth()->guard('web')->user();
+        $user = auth('web')->user();
 
         if (!$user) {
             return back();
         }
 
-        $user->unreadNotifications->update(['read_at' => now()]);
+        $user->unreadNotifications()->update(['read_at' => now()]);
 
         return back();
     }
@@ -46,7 +50,7 @@ class NotificationController extends Controller
     public function clearAll()
     {
         /** @var \App\Models\User|null $user */
-        $user = auth()->guard('web')->user();
+        $user = auth('web')->user();
 
         if (!$user) {
             return back();
@@ -59,7 +63,7 @@ class NotificationController extends Controller
 
     public function destroy(string $id){
         /** @var \App\Models\User|null $user */
-        $user = auth()->guard('web')->user();
+        $user = auth('web')->user();
 
         if (!$user) {
             return back();

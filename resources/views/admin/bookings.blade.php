@@ -36,8 +36,8 @@
                 Confirmed
             </a>
 
-            <a href="{{ route('admin.bookings', ['status' => 'Confirmed']) }}" class="px-6 py-2 rounded-xl font-bold text-sm transition-all
-               {{ $status == 'Confirmed' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
+            <a href="{{ route('admin.bookings', ['status' => 'Completed']) }}" class="px-6 py-2 rounded-xl font-bold text-sm transition-all
+               {{ $status == 'Completed' ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' : 'text-gray-500 hover:bg-gray-50' }}">
                 Completed
             </a>
 
