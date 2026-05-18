@@ -33,8 +33,8 @@
                 </div>
                 <div class="flex items-center text-amber-400">
                     <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                    <span class="ml-2 font-semibold text-slate-900">{{ $vehicle->rating }}</span>
-                    <span class="ml-1 text-gray-400 text-sm">(124 reviews)</span>
+                    <span class="ml-2 font-semibold text-slate-900">{{ $vehicle->rating ?? '—' }}</span>
+                    <span class="ml-1 text-gray-400 text-sm">({{ $vehicle->reviews->count() }} {{ $vehicle->reviews->count() === 1 ? 'review' : 'reviews' }})</span>
                 </div>
             </div>
 

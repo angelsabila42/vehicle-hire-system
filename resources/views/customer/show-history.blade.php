@@ -139,6 +139,72 @@
                     </ul>
                 </div>
 
+                {{-- Review Form - only for completed bookings --}}
+                @if($booking->status === 'Completed')
+                    @php $existingReview = $booking->reviews()->where('user_id', Auth::id())->first(); @endphp
+                    @if($existingReview)
+                        <div class="bg-green-50 border border-green-100 rounded-2xl p-6">
+                            <h3 class="text-sm font-bold tracking-widest mb-4 flex items-center">
+                                <i data-lucide="star" class="mr-2 w-4 h-4 text-amber-400"></i> Your Review
+                            </h3>
+                            <div class="flex items-center mb-2">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i data-lucide="star" class="w-5 h-5 {{ $i <= $existingReview->rating ? 'text-amber-400 fill-current' : 'text-gray-200' }}"></i>
+                                @endfor
+                                <span class="ml-2 text-sm font-bold text-slate-700">{{ $existingReview->rating }}/5</span>
+                            </div>
+                            @if($existingReview->comment)
+                                <p class="text-sm text-gray-600">{{ $existingReview->comment }}</p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="bg-white border border-gray-100 rounded-2xl p-6">
+                            <h3 class="text-sm font-bold tracking-widest mb-6 flex items-center">
+                                <i data-lucide="star" class="mr-2 w-4 h-4"></i> Leave a Review
+                            </h3>
+
+                            @if(session('error'))
+                                <div class="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm">{{ session('error') }}</div>
+                            @endif
+
+                            <form action="{{ route('bookings.review.store', $booking->id) }}" method="POST">
+                                @csrf
+                                <div class="mb-6">
+                                    <label class="block text-sm font-bold text-slate-900 mb-3">Rating</label>
+                                    <div class="flex gap-2" id="star-rating">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <button type="button" data-value="{{ $i }}" onclick="setRating({{ $i }})"
+                                                class="star-btn w-10 h-10 text-gray-200 hover:text-amber-400 transition">
+                                                <i data-lucide="star" class="w-8 h-8 fill-current"></i>
+                                            </button>
+                                        @endfor
+                                    </div>
+                                    <input type="hidden" name="rating" id="rating-input" required>
+                                    @error('rating')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                </div>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-bold text-slate-900 mb-3">Comment <span class="text-gray-400 font-normal">(optional)</span></label>
+                                    <textarea name="comment" rows="3" placeholder="Share your experience..."
+                                        class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-slate-900 placeholder:text-gray-300">{{ old('comment') }}</textarea>
+                                </div>
+                                <button type="submit" class="w-full py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition">
+                                    Submit Review
+                                </button>
+                            </form>
+
+                            <script>
+                                function setRating(value) {
+                                    document.getElementById('rating-input').value = value;
+                                    document.querySelectorAll('.star-btn').forEach(btn => {
+                                        btn.classList.toggle('text-amber-400', parseInt(btn.dataset.value) <= value);
+                                        btn.classList.toggle('text-gray-200', parseInt(btn.dataset.value) > value);
+                                    });
+                                }
+                            </script>
+                        </div>
+                    @endif
+                @endif
+
                 @if(in_array($booking->status, ['Pending', 'Confirmed']))
                     {{-- Cancel Button triggers modal --}}
                     <button type="button" onclick="document.getElementById('cancelModal').classList.remove('hidden')"

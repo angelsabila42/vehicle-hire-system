@@ -7,6 +7,7 @@ use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReviewController;
 
 
 
@@ -20,6 +21,7 @@ Route::middleware(['auth','customer'])->group(function () {
     Route::get('/bookings/create/{id}', [BookingController::class, 'showBookingForm'])->name('customer.booking.create');
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
     Route::patch('/bookings/{id}/cancel', [BookingController::class, 'cancelBooking'])->name('customer.booking.cancel');
+    Route::post('/bookings/{id}/review', [ReviewController::class, 'store'])->name('bookings.review.store');
 
     Route::get('/vehicles/details/{id}', [VehicleController::class, 'showDetails'])->name('customer.vehicles.show.details');
     Route::get('/vehicles', [VehicleController::class, 'index'])->name('customer.vehicles.index');

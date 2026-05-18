@@ -39,6 +39,11 @@ class Booking extends Model
         return $this->belongsTo(PickupLocation::class, 'pickup_location_id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public static function getEndingTodayCount(){
         $count = self::whereDate('endDate', now())->count();
         return $count . " ending today";

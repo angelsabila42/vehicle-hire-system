@@ -94,6 +94,11 @@ class Vehicle extends Model
         return $this->hasMany(Booking::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'vehicle_id', 'VehicleId');
+    }
+
     public function pickupLocation()
     {
         return $this->belongsTo(PickupLocation::class, 'pickup_location_id');

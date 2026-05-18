@@ -150,7 +150,7 @@ class VehicleController extends Controller
      */
     public function showDetails(string $id)
     {
-        $vehicle = Vehicle::findOrFail($id);
+        $vehicle = Vehicle::with('reviews')->findOrFail($id);
 
         return view('customer.vehicle-show', compact('vehicle'));
     }
