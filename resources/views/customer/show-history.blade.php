@@ -140,14 +140,88 @@
                 </div>
 
                 @if(in_array($booking->status, ['Pending', 'Confirmed']))
-                    <form action="{{ route('customer.booking.cancel', $booking->id) }}" method="POST"
-                          onsubmit="return confirm('Are you sure you want to cancel this booking?')">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" class="w-full py-4 bg-red-50 text-red-600 font-bold rounded-2xl hover:bg-red-100 transition border border-red-100">
-                            Cancel Booking
-                        </button>
-                    </form>
+                    {{-- Cancel Button triggers modal --}}
+                    <button type="button" onclick="document.getElementById('cancelModal').classList.remove('hidden')"
+                        class="w-full py-4 bg-red-50 text-red-600 font-bold rounded-2xl hover:bg-red-100 transition border border-red-100">
+                        Cancel Booking
+                    </button>
+
+                    {{-- Cancel Modal --}}
+                    <div id="cancelModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+                        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Cancel Booking</h3>
+                            <p class="text-gray-400 text-sm mb-6">Please select or provide a reason for cancellation.</p>
+
+                            <form action="{{ route('customer.booking.cancel', $booking->id) }}" method="POST" id="cancelForm">
+                                @csrf
+                                @method('PATCH')
+
+                                <div class="space-y-3 mb-4">
+                                    @foreach([
+                                        'Change of plans',
+                                        'Found a better option',
+                                        'Financial constraints',
+                                        'Travel plans changed',
+                                        'Vehicle no longer needed',
+                                        'Other'
+                                    ] as $reason)
+                                        <label class="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 cursor-pointer hover:bg-gray-50 transition has-[:checked]:border-slate-900 has-[:checked]:bg-slate-50">
+                                            <input type="radio" name="reason_choice" value="{{ $reason }}" class="accent-slate-900" onchange="handleReasonChange(this.value)">
+                                            <span class="text-sm font-semibold text-slate-700">{{ $reason }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+
+                                <div id="customReasonWrapper" class="hidden mb-4">
+                                    <textarea id="customReason" placeholder="Type your reason here..." rows="3"
+                                        class="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-slate-900 placeholder:text-gray-300"></textarea>
+                                </div>
+
+                                <input type="hidden" name="cancellation_reason" id="cancellation_reason">
+
+                                @error('cancellation_reason')
+                                    <p class="text-red-500 text-xs mb-3">{{ $message }}</p>
+                                @enderror
+
+                                <div class="flex gap-3 mt-6">
+                                    <button type="button" onclick="document.getElementById('cancelModal').classList.add('hidden')"
+                                        class="flex-1 py-3 rounded-2xl border border-gray-200 text-gray-500 font-bold hover:bg-gray-50 transition">
+                                        Go Back
+                                    </button>
+                                    <button type="button" onclick="submitCancel()"
+                                        class="flex-1 py-3 rounded-2xl bg-red-600 text-white font-bold hover:bg-red-700 transition">
+                                        Confirm Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <script>
+                        function handleReasonChange(value) {
+                            const wrapper = document.getElementById('customReasonWrapper');
+                            wrapper.classList.toggle('hidden', value !== 'Other');
+                        }
+
+                        function submitCancel() {
+                            const choice = document.querySelector('input[name="reason_choice"]:checked');
+                            if (!choice) {
+                                alert('Please select a reason for cancellation.');
+                                return;
+                            }
+                            const reason = choice.value === 'Other'
+                                ? document.getElementById('customReason').value.trim()
+                                : choice.value;
+
+                            if (!reason) {
+                                alert('Please type your reason for cancellation.');
+                                return;
+                            }
+
+                            document.getElementById('cancellation_reason').value = reason;
+                            document.getElementById('cancelForm').submit();
+                        }
+                    </script>
                 @else
                     <div class="w-full py-4 bg-gray-50 text-gray-400 font-bold rounded-2xl text-center border border-gray-100">
                         Booking cannot be cancelled

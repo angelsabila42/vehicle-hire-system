@@ -165,7 +165,11 @@ class BookingController extends Controller
             return redirect()->back()->withErrors(['cancel' => 'This booking cannot be cancelled.']);
         }
 
+        $request = request();
+        $request->validate(['cancellation_reason' => 'required|string|max:500']);
+
         $booking->status = 'Cancelled';
+        $booking->cancellation_reason = $request->cancellation_reason;
         $booking->save();
 
         $admins = User::where('role', 'admin')->get();
