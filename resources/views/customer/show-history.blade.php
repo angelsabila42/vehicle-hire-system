@@ -290,7 +290,7 @@
                     </script>
                 @else
                     <div class="w-full py-4 bg-gray-50 text-gray-400 font-bold rounded-2xl text-center border border-gray-100">
-                        Booking cannot be cancelled
+                        This booking has been cancelled
                     </div>
                 @endif
 
