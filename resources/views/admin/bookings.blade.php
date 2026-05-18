@@ -109,11 +109,14 @@
                                     'id' => $booking->id,
                                     'customer_name' => $booking->user?->name ?? 'Unknown customer',
                                     'customer_email' => $booking->user?->email ?? '',
+                                    'customer_phone' => $booking->phone ?? '',
                                     'vehicle_name' => $vehicleLabel,
                                     'pickup_date' => $start?->format('M j, Y') ?? '',
+                                    'return_date' => $end?->format('M j, Y') ?? '',
                                     'location' => $booking->pickupLocation?->address ?? '',
                                     'status' => $booking->status,
                                     'amount' => number_format($amount),
+                                    'cancellation_reason' => $booking->cancellation_reason ?? '',
                                 ]))" class="p-2 text-gray-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>

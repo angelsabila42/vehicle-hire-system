@@ -88,7 +88,14 @@
                     <div class="pt-4 space-y-4">
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-400 font-bold">Status</span>
-                            <span class="px-3 py-1 rounded-lg bg-amber-50 text-amber-600 text-[11px] font-extrabold uppercase tracking-tight" x-text="selectedBooking.status"></span>
+                            <span class="px-3 py-1 rounded-lg text-[11px] font-extrabold uppercase tracking-tight"
+                                :class="{
+                                    'bg-green-50 text-green-600': selectedBooking.status === 'Confirmed',
+                                    'bg-amber-50 text-amber-600': selectedBooking.status === 'Pending',
+                                    'bg-gray-100 text-gray-500': selectedBooking.status === 'Completed',
+                                    'bg-red-50 text-red-600': selectedBooking.status === 'Cancelled' || selectedBooking.status === 'Rejected',
+                                }"
+                                x-text="selectedBooking.status"></span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-400 font-bold">Total Amount</span>
@@ -96,6 +103,10 @@
                                 <span class="text-xs text-gray-400 mr-1 uppercase">UGX</span>
                                 <span x-text="selectedBooking.amount"></span>
                             </p>
+                        </div>
+                        <div x-show="selectedBooking.cancellation_reason" class="bg-red-50 border border-red-100 rounded-2xl p-4">
+                            <p class="text-[10px] uppercase font-extrabold text-red-400 tracking-wider mb-1">Cancellation Reason</p>
+                            <p class="text-sm font-semibold text-red-700" x-text="selectedBooking.cancellation_reason"></p>
                         </div>
                     </div>
                 </div>
