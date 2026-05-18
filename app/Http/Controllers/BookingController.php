@@ -157,7 +157,7 @@ class BookingController extends Controller
         return view('customer.show-history', compact('booking'));
     }
 
-    public function cancelBooking(string $id)
+    public function cancelBooking(Request $request,string $id)
     {
         $booking = Booking::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
 
