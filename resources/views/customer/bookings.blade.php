@@ -28,7 +28,11 @@
                                             <h3 class="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">{{ $booking->vehicle->name }}</h3>
                                             <p class="text-sm text-gray-400 mt-1">Booking #{{ $booking->id }}</p>
                                         </div>
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-50 text-orange-600 border border-orange-100">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border
+                                            {{ $booking->status === 'Confirmed'  ? 'bg-green-50 text-green-600 border-green-100' :
+                                              ($booking->status === 'Pending'    ? 'bg-orange-50 text-orange-600 border-orange-100' :
+                                              ($booking->status === 'Completed'  ? 'bg-gray-100 text-gray-500 border-gray-200' :
+                                              ($booking->status === 'Cancelled' || $booking->status === 'Rejected' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-gray-100 text-gray-500 border-gray-200'))) }}">
                                             {{ ucfirst($booking->status) }}
                                         </span>
                                     </div>

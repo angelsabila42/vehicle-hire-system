@@ -66,6 +66,7 @@ class BookingController extends Controller
         
         $bookings = Booking::with('vehicle')
             ->where('user_id', Auth::id())
+            ->latest()
             ->get();
 
         return view('customer.bookings', compact('bookings'));
