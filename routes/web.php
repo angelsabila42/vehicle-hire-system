@@ -56,11 +56,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::delete('/notifications/clear', [NotificationController::class, 'clearAll'])->name('notifications.clear');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.delete');
-    Route::get('/welcome', function () {
-    return view('welcome');
-});
+ 
     
 });
+
 
 
 
